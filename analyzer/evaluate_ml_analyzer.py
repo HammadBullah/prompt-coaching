@@ -33,4 +33,4 @@ def predict(text):
 
     return results
 
-print(predict("Explain cloud computing using language suitable for a child."))
+print(predict("Hi"))
