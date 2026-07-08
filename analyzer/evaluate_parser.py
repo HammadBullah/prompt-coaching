@@ -5,7 +5,7 @@ import os
 BACKEND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "backend")
 sys.path.insert(0, BACKEND_PATH)
 
-from parser import analyse_prompt
+from analyzer.parser import analyse_prompt
 
 DIMENSIONS = ["goal", "audience", "format", "constraints", "context"]
 LABELLED_FILE = "/Users/hammadsafi/Downloads/adaptive_prompt_coaching/dataset/final_dataset.json"
