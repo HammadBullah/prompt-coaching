@@ -1,3 +1,8 @@
 prompt_classifier/
 results/
 dataset/
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
