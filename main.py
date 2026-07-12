@@ -10,14 +10,8 @@ import json
 import re
 import os
 
-# ── Your existing classifier imports ─────────────────────────
 from classifier.evaluate_ml_analyzer import predict_missing_dimensions
 from classifier.clarification import get_clarification_questions, ClarificationQuestion
-
-
-# ═══════════════════════════════════════════════════════════════
-# APP SETUP
-# ═══════════════════════════════════════════════════════════════
 
 app = FastAPI(
     title="PromptAI",
@@ -33,13 +27,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Model config ──────────────────────────────────────────────
-OLLAMA_MODEL = "qwen2.5:1.5b"   # your local Ollama model
+OLLAMA_MODEL = "qwen2.5:1.5b"
 
 
-# ═══════════════════════════════════════════════════════════════
+
 # DATABASE — session storage
-# ═══════════════════════════════════════════════════════════════
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "sessions.db")
 
@@ -121,10 +113,8 @@ async def startup():
     init_db()
 
 
-# ═══════════════════════════════════════════════════════════════
-# REQUEST / RESPONSE MODELS
-# ═══════════════════════════════════════════════════════════════
-
+ # REQUEST & RESPONSE MODELS
+ 
 class AnalyseRequest(BaseModel):
     prompt: str
 
@@ -150,10 +140,8 @@ class ChatRequest(BaseModel):
     clarification_answers: Optional[Dict[str, str]] = None
 
 
-# ═══════════════════════════════════════════════════════════════
-# PROMPT RECONSTRUCTION
-# ═══════════════════════════════════════════════════════════════
-
+ # PROMPT RECONSTRUCTION
+ 
 def reconstruct_prompt(original: str, answers: Dict[str, str]) -> str:
     """
     Creates an optimized prompt from the original prompt
@@ -231,10 +219,8 @@ def score_prompt(prompt: str, missing: list) -> int:
     return score
 
 
-# ═══════════════════════════════════════════════════════════════
-# HUMANISATION MODULE
-# ═══════════════════════════════════════════════════════════════
-
+ # HUMANISATION MODULE
+ 
 # Stage 1 — Rule-based linguistic transforms
 CONTRACTION_MAP = {
     "it is":      "it's",
@@ -308,7 +294,7 @@ def apply_rule_transforms(text: str) -> str:
 
 
 def humanise_with_llm(text: str) -> Optional[str]:
-    """Stage 2 — Gemma 4 rewrite pass for natural conversational tone."""
+    """Stage 2 —  Qwen 2.5 rewrite pass for natural conversational tone."""
     instruction = (
         "Rewrite the following AI-generated response to sound more natural and conversational, "
         "like a knowledgeable friend explaining something clearly. "
@@ -341,10 +327,8 @@ def humanise(text: str) -> dict:
     }
 
 
-# ═══════════════════════════════════════════════════════════════
-# LLM GENERATION
-# ═══════════════════════════════════════════════════════════════
-
+ # LLM GENERATION
+ 
 def generate_response(prompt: str) -> Optional[str]:
     """Generate a response from Qwen 2.5 via Ollama."""
     try:
@@ -367,10 +351,8 @@ def check_ollama() -> bool:
         return False
 
 
-# ═══════════════════════════════════════════════════════════════
-# ENDPOINTS
-# ═══════════════════════════════════════════════════════════════
-
+ # ENDPOINTS
+ 
 @app.get("/")
 async def root():
     return {
@@ -390,7 +372,6 @@ async def status():
     }
 
 
-# ── Step 1: Analyse prompt ─────────────────────────────────────
 @app.post("/api/prompt/analyse")
 async def analyse(request: AnalyseRequest):
 
@@ -415,11 +396,9 @@ async def analyse(request: AnalyseRequest):
     print("Score:", quality_score)
     print("=" * 60)
 
-    # Build analysis dict for frontend dimension display
     all_dims = ["goal", "audience", "format", "constraints", "context"]
     analysis = {d: d not in missing for d in all_dims}
 
-    # If nothing is missing or score already high — skip coaching
     if len(missing) == 0 or quality_score >= 80:
         session_id = str(uuid.uuid4())
         db_create_session(session_id, prompt, [])
@@ -454,7 +433,6 @@ async def analyse(request: AnalyseRequest):
     }
 
 
-# ── Step 2: Submit clarification answer ────────────────────────
 @app.post("/api/prompt/answer")
 async def answer(request: AnswerRequest):
     """
@@ -474,7 +452,6 @@ async def answer(request: AnswerRequest):
     remaining_missing = [d for d in session["missing_dims"] if d not in answered]
 
     if remaining_missing:
-        # More questions to ask
         questions = get_clarification_questions(remaining_missing)
         next_q = questions[0] if questions else None
         return {
@@ -484,7 +461,6 @@ async def answer(request: AnswerRequest):
             "total_questions": len(session["missing_dims"]),
         }
     else:
-        # All answered — reconstruct the refined prompt
         refined = reconstruct_prompt(
             session["original_prompt"],
             updated_session["answers"]
@@ -493,7 +469,7 @@ async def answer(request: AnswerRequest):
 
         all_dims = ["goal", "audience", "format", "constraints", "context"]
         original_score = score_prompt(session["original_prompt"], session["missing_dims"])
-        refined_score = 100  # all dimensions now filled
+        refined_score = 100 
 
         return {
             "status":        "ready",
@@ -510,11 +486,10 @@ async def answer(request: AnswerRequest):
         }
 
 
-# ── Step 3: Generate humanised response ────────────────────────
 @app.post("/api/prompt/generate")
 async def generate(request: GenerateRequest):
     """
-    Takes the reconstructed refined prompt, sends it to Gemma 4,
+    Takes the reconstructed refined prompt, sends it to  Qwen 2.5,
     and returns a humanised response.
     """
     session = db_get_session(request.session_id)
@@ -531,7 +506,7 @@ async def generate(request: GenerateRequest):
 
     raw = generate_response(prompt_to_use)
     if not raw:
-        raise HTTPException(status_code=500, detail="Failed to generate response from Gemma 4.")
+        raise HTTPException(status_code=500, detail="Failed to generate response from  Qwen 2.5.")
 
     humanised = humanise(raw)
 
@@ -545,11 +520,11 @@ async def generate(request: GenerateRequest):
     }
 
 
-# ── Standard (uncoached) mode ──────────────────────────────────
+# Standard mode
 @app.post("/api/prompt/standard")
 async def standard(request: StandardRequest):
     """
-    Sends prompt directly to Gemma 4 without coaching.
+    Sends prompt directly to  Qwen 2.5 without coaching.
     Used for comparison in evaluation.
     """
     if not check_ollama():
@@ -563,7 +538,6 @@ async def standard(request: StandardRequest):
     }
 
 
-# ── Legacy /analyze endpoint (kept for compatibility) ──────────
 @app.post("/analyze")
 async def analyze_legacy(request: PromptRequest):
     missing = [
@@ -581,7 +555,6 @@ async def analyze_legacy(request: PromptRequest):
     }
 
 
-# ── Legacy /chat endpoint (kept for compatibility) ─────────────
 @app.post("/chat")
 async def chat_legacy(request: ChatRequest):
     missing = predict_missing_dimensions(request.prompt)
@@ -602,7 +575,7 @@ async def chat_legacy(request: ChatRequest):
     }
 
 
-# ── Session data retrieval ────────────────────────────────────
+# Session data retrieval
 @app.get("/api/session/{session_id}")
 async def get_session(session_id: str):
     session = db_get_session(session_id)
@@ -610,11 +583,7 @@ async def get_session(session_id: str):
         raise HTTPException(status_code=404, detail="Session not found.")
     return session
 
-
-# ═══════════════════════════════════════════════════════════════
-# RUN
-# ═══════════════════════════════════════════════════════════════
-
+ 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -115,14 +115,12 @@
     50% { opacity: 0.3; }
   }
 
-  /* ── Layout ── */
   main {
     flex: 1;
     display: flex;
     overflow: hidden;
   }
 
-  /* ── Left sidebar ── */
   .sidebar {
     width: 220px;
     flex-shrink: 0;
@@ -216,7 +214,6 @@
   .dtag.yes { color: var(--black); }
   .dtag.no  { color: var(--g300); }
 
-  /* ── Chat ── */
   .chat-wrap {
     flex: 1;
     display: flex;
@@ -235,7 +232,6 @@
     scrollbar-color: var(--g200) transparent;
   }
 
-  /* Empty state */
   .empty {
     flex: 1;
     display: flex;
@@ -293,7 +289,6 @@
 
   .chip:hover { border-color: var(--black); color: var(--black); }
 
-  /* Messages */
   .msg {
     display: flex;
     gap: 9px;
@@ -368,7 +363,6 @@
 
   .msg.user .mtime { text-align: right; }
 
-  /* Question card */
   .qcard {
     background: var(--white);
     border: 1px solid var(--g200);
@@ -389,7 +383,6 @@
   .qtext { font-size: 13px; color: var(--black); line-height: 1.55; }
   .qeg   { font-size: 11px; color: var(--g400); margin-top: 4px; font-style: italic; }
 
-  /* Comparison card */
   .cmp {
     background: var(--g100);
     border: 1px solid var(--g200);
@@ -449,7 +442,6 @@
     margin-top: 8px;
   }
 
-  /* Typing indicator */
   .typing {
     display: flex;
     gap: 3px;
@@ -476,7 +468,6 @@
     50%      { transform: translateY(-3px); opacity: 1; }
   }
 
-  /* Input area */
   .chat-foot {
     padding: 14px 20px;
     border-top: 1px solid var(--g200);
@@ -539,7 +530,6 @@
     letter-spacing: 0.2px;
   }
 
-  /* ── Right panel ── */
   .right {
     width: 210px;
     flex-shrink: 0;
@@ -583,7 +573,6 @@
 </head>
 <body>
 
-<!-- Header -->
 <header>
   <div class="logo">
     <span class="logo-main">Prompt</span><span class="logo-tag">AI</span>
@@ -602,7 +591,6 @@
 
 <main>
 
-  <!-- Left sidebar -->
   <div class="sidebar">
 
     <div>
@@ -639,12 +627,11 @@
     <div style="margin-top:auto">
       <div class="slabel">Model</div>
       <div style="font-size:11px;color:var(--g500)">DistilBERT Classifier</div>
-      <div style="font-size:11px;color:var(--g500);margin-top:3px">Gemma 4 9B via Ollama</div>
+      <div style="font-size:11px;color:var(--g500);margin-top:3px"> Qwen 2.5 via Ollama</div>
     </div>
 
   </div>
 
-  <!-- Chat -->
   <div class="chat-wrap">
     <div class="chat-body" id="chat-body">
       <div class="empty" id="empty">
@@ -672,7 +659,6 @@
     </div>
   </div>
 
-  <!-- Right panel -->
   <div class="right">
     <div>
       <div class="slabel">Humanised Response</div>
@@ -694,7 +680,6 @@
   let mode = 'coached';
   let busy = false;
 
-  // ── Status check ─────────────────────────────
   async function checkStatus() {
     try {
       const r = await fetch(`${API}/api/prompt/status`);
@@ -710,7 +695,6 @@
   checkStatus();
   setInterval(checkStatus, 10000);
 
-  // ── Mode toggle ───────────────────────────────
   function setMode(m) {
     mode = m;
     document.getElementById('btn-coached').classList.toggle('on', m === 'coached');
@@ -718,7 +702,6 @@
     reset();
   }
 
-  // ── Input helpers ─────────────────────────────
   function grow(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 80) + 'px';
@@ -732,7 +715,6 @@
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  // ── Score / dims ──────────────────────────────
   function setScore(score) {
     const el = document.getElementById('snum');
     if (score === null) {
@@ -761,7 +743,6 @@
     });
   }
 
-  // ── Message builders ──────────────────────────
   function addMsg(content, isUser = false, type = 'text') {
     const e = document.getElementById('empty');
     if (e) e.remove();
@@ -822,7 +803,6 @@
     if (t) t.remove();
   }
 
-  // ── Core send flow ────────────────────────────
   async function send() {
     const inp = document.getElementById('chat-input');
     const txt = inp.value.trim();
@@ -837,7 +817,7 @@
 
     try {
 
-      // ── Standard mode: send directly to LLM ──
+      // Standard mode: send directly to LLM
       if (mode === 'standard') {
         const r = await fetch(`${API}/api/prompt/standard`, {
           method: 'POST',
@@ -849,7 +829,6 @@
         addMsg(d.response || 'No response.', false);
         setRespText(d.response);
 
-      // ── Coached mode: Step 1 — analyse ────────
       } else if (!sessionId) {
         const r = await fetch(`${API}/api/prompt/analyse`, {
           method: 'POST',
@@ -864,17 +843,14 @@
         if (d.analysis) setDims(d.analysis);
 
         if (!d.needs_coaching || !d.next_question) {
-          // Prompt already good — go straight to generation
           addMsg(d.message || 'Your prompt is well-structured! Generating response…', false);
           await generate();
         } else {
-          // Start clarification flow
           addMsg(d.message, false);
           currentDim = d.next_question.dimension;
           addMsg(d.next_question, false, 'question');
         }
 
-      // ── Coached mode: Step 2 — answer questions
       } else if (currentDim) {
         const r = await fetch(`${API}/api/prompt/answer`, {
           method: 'POST',
@@ -889,13 +865,11 @@
         rmTyping();
 
         if (d.status === 'clarifying' && d.next_question) {
-          // More questions remaining
           currentDim = d.next_question.dimension;
           addMsg(`Got it! (${d.answered_count}/${d.total_questions} answered)`, false);
           addMsg(d.next_question, false, 'question');
 
         } else if (d.status === 'ready') {
-          // All questions answered — show comparison and generate
           currentDim = null;
           addMsg(d.message, false);
           if (d.comparison) {
@@ -918,7 +892,6 @@
     inp.focus();
   }
 
-  // ── Step 3 — Generate humanised response ──────
   async function generate() {
     if (!sessionId) return;
     addTyping();
@@ -935,11 +908,10 @@
       setRespText(finalText);
     } catch {
       rmTyping();
-      addMsg('⚠ Failed to get response from Gemma 4. Make sure Ollama is running.', false);
+      addMsg('⚠ Failed to get response from Qwen 2.5. Make sure Ollama is running.', false);
     }
   }
 
-  // ── Right panel helpers ───────────────────────
   function setRespText(text) {
     const el = document.getElementById('resp-text');
     el.textContent = text || '';
