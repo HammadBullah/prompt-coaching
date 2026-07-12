@@ -4,7 +4,7 @@ from typing import List
 class ClarificationQuestion(BaseModel):
     dimension: str
     question: str
-    example: str = ""
+    example: str = "standard"
 
 def get_clarification_questions(missing_dimensions: List[str]) -> List[ClarificationQuestion]:
     """Return clarification questions for missing dimensions"""
