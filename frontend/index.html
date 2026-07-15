@@ -864,6 +864,13 @@
         const d = await r.json();
         rmTyping();
 
+        if (d.analysis) setDims(d.analysis);
+        if (d.quality_score !== undefined) setScore(d.quality_score);
+
+        if (d.refined_prompt) {
+    setRefinedText(d.refined_prompt);
+}
+
         if (d.status === 'clarifying' && d.next_question) {
           currentDim = d.next_question.dimension;
           addMsg(`Got it! (${d.answered_count}/${d.total_questions} answered)`, false);
@@ -877,6 +884,7 @@
             setScore(d.comparison.refined_score);
             setRefinedText(d.refined_prompt);
           }
+
           await generate();
         }
       }
@@ -906,6 +914,7 @@
       const finalText = d.humanised_response || d.raw_response || 'No response generated.';
       addMsg(finalText, false);
       setRespText(finalText);
+      if (d.refined_prompt) setRefinedText(d.refined_prompt);
     } catch {
       rmTyping();
       addMsg('⚠ Failed to get response from Qwen 2.5. Make sure Ollama is running.', false);

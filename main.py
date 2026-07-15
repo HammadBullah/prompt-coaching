@@ -10,8 +10,9 @@ import json
 import re
 import os
 
-from classifier.evaluate_ml_analyzer import predict_missing_dimensions
-from classifier.clarification import get_clarification_questions, ClarificationQuestion
+from clarification.evaluate_ml_analyzer import predict_missing_dimensions
+from clarification.clarification import get_clarification_questions, ClarificationQuestion
+from clarification.recustructor import reconstruct_prompt, score_prompt, ALL_DIMS
 
 app = FastAPI(
     title="PromptAI",
@@ -140,83 +141,6 @@ class ChatRequest(BaseModel):
     clarification_answers: Optional[Dict[str, str]] = None
 
 
- # PROMPT RECONSTRUCTION
- 
-def reconstruct_prompt(original: str, answers: Dict[str, str]) -> str:
-    """
-    Creates an optimized prompt from the original prompt
-    and clarification answers.
-    """
-
-    normalized_answers = {
-        key.lower().strip(): value.strip()
-        for key, value in answers.items()
-        if value and value.strip()
-    }
-
-    prompt_parts = []
-
-    # Main task
-    prompt_parts.append(
-        f"Create a response for the following task: {original}."
-    )
-
-
-    if "goal" in normalized_answers:
-        prompt_parts.append(
-            f"The goal is: {normalized_answers['goal']}."
-        )
-
-    if "context" in normalized_answers:
-        prompt_parts.append(
-            f"Background context: {normalized_answers['context']}."
-        )
-
-    if "audience" in normalized_answers:
-        prompt_parts.append(
-            f"The intended audience is: {normalized_answers['audience']}."
-        )
-
-    if "format" in normalized_answers:
-        prompt_parts.append(
-            f"The output should be in a {normalized_answers['format']} format."
-        )
-
-    if "constraints" in normalized_answers:
-        prompt_parts.append(
-            f"Important constraints: {normalized_answers['constraints']}."
-        )
-
-
-    prompt_parts.append(
-        "Follow all requirements above and provide the final answer directly."
-    )
-
-
-    return "\n\n".join(prompt_parts)
-
-
-def score_prompt(prompt: str, missing: list) -> int:
-    all_dims = [
-        "goal",
-        "audience",
-        "format",
-        "constraints",
-        "context"
-    ]
-
-    missing = [m.lower() for m in missing]
-
-    present = len(
-        [
-            d for d in all_dims
-            if d not in missing
-        ]
-    )
-
-    score = int((present / len(all_dims)) * 100)
-
-    return score
 
 
  # HUMANISATION MODULE
@@ -374,115 +298,88 @@ async def status():
 
 @app.post("/api/prompt/analyse")
 async def analyse(request: AnalyseRequest):
-
-    print("=" * 60)
-    print("REQUEST RECEIVED")
-    print("Prompt:", repr(request.prompt))
-
-    if not request.prompt or len(request.prompt.strip()) < 3:
-        print("ERROR: Prompt too short")
-        raise HTTPException(status_code=400, detail="Prompt is too short.")
-
     prompt = request.prompt.strip()
+    
+    # 1. Get missing dims and FORCE lowercase to avoid tick bugs
+    raw_missing = predict_missing_dimensions(prompt)
+    missing = [m.lower().strip() for m in raw_missing] 
+    
+    quality_score = score_prompt(missing)
+    questions = get_clarification_questions(missing)
 
-    print("Running classifier...")
-
-    missing = predict_missing_dimensions(prompt)
-
-    print("Missing:", missing)
-
-    quality_score = score_prompt(prompt, missing)
-
-    print("Score:", quality_score)
-    print("=" * 60)
-
+    
+    # 2. Build analysis map for the dots
     all_dims = ["goal", "audience", "format", "constraints", "context"]
-    analysis = {d: d not in missing for d in all_dims}
+    analysis = {d: d not in missing for d in ALL_DIMS}
 
-    if len(missing) == 0 or quality_score >= 80:
-        session_id = str(uuid.uuid4())
-        db_create_session(session_id, prompt, [])
-        return {
-            "session_id":     session_id,
-            "quality_score":  quality_score,
-            "analysis":       analysis,
-            "missing":        [],
-            "present_count":  len(all_dims),
-            "needs_coaching": False,
-            "next_question":  None,
-            "message":        "Your prompt is already well-structured! Generating response…",
-        }
-
-    # Create session
     session_id = str(uuid.uuid4())
     db_create_session(session_id, prompt, missing)
 
-    # Get first clarifying question
-    questions = get_clarification_questions(missing)
-    first_q = questions[0] if questions else None
+    if len(missing) == 0 or quality_score >= 80:
+        session_id = str(uuid.uuid4())
+        # Even if it's perfect, run it through the reconstructor to get the "Expert" version
+        refined = reconstruct_prompt(prompt, {}) 
+        db_create_session(session_id, prompt, [])
+        db_save_refined(session_id, refined) # Save it to DB
+        
+        return {
+            "session_id":     session_id,
+            "quality_score":  100,
+            "analysis":       {d: True for d in ["goal", "audience", "format", "constraints", "context"]},
+            "missing":        [],
+            "needs_coaching": False,
+            "refined_prompt": refined, # <--- Add this so it shows in the sidebar!
+            "message":        "Your prompt is already well-structured! Enhancing for maximum quality...",
+        }
 
+    questions = get_clarification_questions(missing)
     return {
-        "session_id":     session_id,
-        "quality_score":  quality_score,
-        "analysis":       analysis,
-        "missing":        missing,
-        "present_count":  len(all_dims) - len(missing),
+        "session_id": session_id,
+        "quality_score": quality_score,
+        "analysis": analysis,
+        "missing": missing,
         "needs_coaching": True,
-        "next_question":  first_q,
-        "message":        f"Your prompt is missing some details. I'll ask you a few quick questions to make it better.",
+        "next_question": questions[0] if questions else None,
+        "message": "I've identified some missing details to improve your prompt.",
     }
+
 
 
 @app.post("/api/prompt/answer")
 async def answer(request: AnswerRequest):
-    """
-    Receives the user's answer to a clarifying question.
-    Saves it and returns the next question, or signals coaching is complete.
-    """
     session = db_get_session(request.session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found.")
-
-    # Save this answer
     db_save_answer(request.session_id, request.dimension, request.answer)
-
-    # Get updated answers
+    
     updated_session = db_get_session(request.session_id)
-    answered = list(updated_session["answers"].keys())
-    remaining_missing = [d for d in session["missing_dims"] if d not in answered]
+    answered_keys = [k.lower() for k in updated_session["answers"].keys()]
+    
+    # Re-calculate dots: True if it was never missing OR if it is now answered
+    analysis = {
+        d: (d not in session["missing_dims"]) or (d in answered_keys)
+        for d in ALL_DIMS
+    }
+    
+    score = int((len([v for v in analysis.values() if v]) / len(ALL_DIMS)) * 100)
+    remaining = [d for d in session["missing_dims"] if d not in answered_keys]
 
-    if remaining_missing:
-        questions = get_clarification_questions(remaining_missing)
-        next_q = questions[0] if questions else None
+    if remaining:
+        questions = get_clarification_questions(remaining)
         return {
-            "status":          "clarifying",
-            "next_question":   next_q,
-            "answered_count":  len(answered),
-            "total_questions": len(session["missing_dims"]),
+            "status": "clarifying",
+            "analysis": analysis,
+            "quality_score": score,
+            "next_question": questions[0]
         }
     else:
-        refined = reconstruct_prompt(
-            session["original_prompt"],
-            updated_session["answers"]
-        )
+        # Objective 3: The Reconstruction Step
+        refined = reconstruct_prompt(session["original_prompt"], updated_session["answers"])
         db_save_refined(request.session_id, refined)
-
-        all_dims = ["goal", "audience", "format", "constraints", "context"]
-        original_score = score_prompt(session["original_prompt"], session["missing_dims"])
-        refined_score = 100 
-
         return {
-            "status":        "ready",
-            "next_question": None,
-            "refined_prompt": refined,
-            "comparison": {
-                "original":       session["original_prompt"],
-                "refined":        refined,
-                "original_score": original_score,
-                "refined_score":  refined_score,
-                "improvement":    refined_score - original_score,
-            },
-            "message": "All details collected. Building your improved prompt and generating response…",
+            "status": "ready",
+            "analysis": {d: True for d in ALL_DIMS},
+            "quality_score": 100,
+            "refined_prompt": refined, # <--- THIS UPDATES THE SIDEBAR
+            "message": "Reconstruction complete. Generating Expert Response...",
         }
 
 
