@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PromptAI</title>
@@ -344,10 +345,37 @@
   }
 
   .bubble.ai {
-    background: var(--g100);
-    border-top-left-radius: 3px;
-    color: var(--black);
-  }
+  background: var(--g100);
+  border-top-left-radius: 3px;
+  color: var(--black);
+  /* Ensure it handles multi-line content correctly */
+  display: block; 
+}
+.bubble.ai h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  margin: 16px 0 8px 0;
+  border-bottom: 1px solid var(--g200);
+  padding-bottom: 4px;
+}
+
+.bubble.ai p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.bubble.ai ul, .bubble.ai ol {
+  margin: 8px 0 16px 20px;
+}
+
+.bubble.ai li {
+  margin-bottom: 6px;
+}
+
+.bubble.ai strong {
+  font-weight: 600;
+  color: var(--black);
+}
 
   .bubble.user {
     background: var(--black);
@@ -774,9 +802,13 @@
           </div>
         </div>
         <div class="cmp-improve">↑ +${content.improvement}% quality improvement</div>
-      </div>`;
-    } else {
-      html = `<div class="bubble ${isUser ? 'user' : 'ai'}">${content}</div>`;
+      </div>`;}
+      else {
+    if (!isUser) {
+        html = `<div class="bubble ai">${marked.parse(content)}</div>`;
+      } else {
+        html = `<div class="bubble user">${content}</div>`;
+      }
     }
 
     w.innerHTML = `
@@ -923,7 +955,7 @@
 
   function setRespText(text) {
     const el = document.getElementById('resp-text');
-    el.textContent = text || '';
+    el.innerHTML = marked.parse(text || ''); 
     el.className = 'rtext live';
   }
 
