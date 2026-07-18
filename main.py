@@ -32,7 +32,6 @@ OLLAMA_MODEL = "qwen2.5:1.5b"
 
 
 
-# DATABASE — session storage
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "sessions.db")
 
@@ -114,7 +113,6 @@ async def startup():
     init_db()
 
 
- # REQUEST & RESPONSE MODELS
  
 class AnalyseRequest(BaseModel):
     prompt: str
@@ -145,7 +143,6 @@ class ChatRequest(BaseModel):
 
  # HUMANISATION MODULE
  
-# Stage 1 — Rule-based linguistic transforms
 CONTRACTION_MAP = {
     "it is":      "it's",
     "you are":    "you're",
@@ -204,7 +201,6 @@ def apply_rule_transforms(text: str) -> str:
         text = text.replace(formal, natural)
     for formal, natural in FORMAL_MAP.items():
         text = text.replace(formal, natural)
-    # Break very long sentences at natural conjunction points
     sentences = re.split(r'(?<=[.!?])\s+', text)
     result = []
     for s in sentences:
@@ -251,7 +247,7 @@ def humanise(text: str) -> dict:
     }
 
 
- # LLM GENERATION
+# LLM GENERATION
  
 def generate_response(prompt: str) -> Optional[str]:
     """Generate a response from Qwen 2.5 via Ollama."""
@@ -275,7 +271,7 @@ def check_ollama() -> bool:
         return False
 
 
- # ENDPOINTS
+# ENDPOINTS
  
 @app.get("/")
 async def root():
@@ -300,7 +296,6 @@ async def status():
 async def analyse(request: AnalyseRequest):
     prompt = request.prompt.strip()
     
-    # 1. Get missing dims and FORCE lowercase to avoid tick bugs
     raw_missing = predict_missing_dimensions(prompt)
     missing = [m.lower().strip() for m in raw_missing] 
     
@@ -308,7 +303,6 @@ async def analyse(request: AnalyseRequest):
     questions = get_clarification_questions(missing)
 
     
-    # 2. Build analysis map for the dots
     all_dims = ["goal", "audience", "format", "constraints", "context"]
     analysis = {d: d not in missing for d in ALL_DIMS}
 
@@ -317,10 +311,9 @@ async def analyse(request: AnalyseRequest):
 
     if len(missing) == 0 or quality_score >= 80:
         session_id = str(uuid.uuid4())
-        # Even if it's perfect, run it through the reconstructor to get the "Expert" version
         refined = reconstruct_prompt(prompt, {}) 
         db_create_session(session_id, prompt, [])
-        db_save_refined(session_id, refined) # Save it to DB
+        db_save_refined(session_id, refined) 
         
         return {
             "session_id":     session_id,
@@ -328,7 +321,7 @@ async def analyse(request: AnalyseRequest):
             "analysis":       {d: True for d in ["goal", "audience", "format", "constraints", "context"]},
             "missing":        [],
             "needs_coaching": False,
-            "refined_prompt": refined, # <--- Add this so it shows in the sidebar!
+            "refined_prompt": refined,
             "message":        "Your prompt is already well-structured! Enhancing for maximum quality...",
         }
 
@@ -353,7 +346,6 @@ async def answer(request: AnswerRequest):
     updated_session = db_get_session(request.session_id)
     answered_keys = [k.lower() for k in updated_session["answers"].keys()]
     
-    # Re-calculate dots: True if it was never missing OR if it is now answered
     analysis = {
         d: (d not in session["missing_dims"]) or (d in answered_keys)
         for d in ALL_DIMS
@@ -371,14 +363,13 @@ async def answer(request: AnswerRequest):
             "next_question": questions[0]
         }
     else:
-        # Objective 3: The Reconstruction Step
         refined = reconstruct_prompt(session["original_prompt"], updated_session["answers"])
         db_save_refined(request.session_id, refined)
         return {
             "status": "ready",
             "analysis": {d: True for d in ALL_DIMS},
             "quality_score": 100,
-            "refined_prompt": refined, # <--- THIS UPDATES THE SIDEBAR
+            "refined_prompt": refined, 
             "message": "Reconstruction complete. Generating Expert Response...",
         }
 
@@ -417,7 +408,6 @@ async def generate(request: GenerateRequest):
     }
 
 
-# Standard mode
 @app.post("/api/prompt/standard")
 async def standard(request: StandardRequest):
     """
@@ -472,7 +462,6 @@ async def chat_legacy(request: ChatRequest):
     }
 
 
-# Session data retrieval
 @app.get("/api/session/{session_id}")
 async def get_session(session_id: str):
     session = db_get_session(session_id)
