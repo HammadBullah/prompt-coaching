@@ -21,16 +21,19 @@ def score_prompt(missing_dims: List[str]) -> int:
     return int((present / len(ALL_DIMS)) * 100)
 
 def _build_skeleton(original: str, answers: Dict[str, str]) -> str:
-
     normalised = {k.lower().strip(): v.strip() for k, v in answers.items() if v and v.strip()}
     
-    sections = [f"Task: {original.strip()}"]
+    sections = [f"Original prompt: {original.strip()}"]
+    
+    sections.append("Important Dimensions to include:")
+    
     for dim in DIMENSION_ORDER:
         if dim in normalised:
             label = DIMENSION_LABELS[dim]
             sections.append(f"{label}: {normalised[dim]}")
     
     sections.append("Instruction: Provide a complete and direct response.")
+    
     return "\n\n".join(sections)
 
 def _ai_refine(skeleton: str) -> str:
