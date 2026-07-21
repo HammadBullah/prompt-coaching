@@ -13,6 +13,7 @@ import os
 from clarification.evaluate_ml_analyzer import predict_missing_dimensions
 from clarification.clarification import get_clarification_questions, ClarificationQuestion
 from clarification.recustructor import reconstruct_prompt, score_prompt, ALL_DIMS
+from humanizer.humanizer import LinguisticHumaniser
 
 app = FastAPI(
     title="PromptAI",
@@ -141,110 +142,8 @@ class ChatRequest(BaseModel):
 
 
 
- # HUMANISATION MODULE
- 
-CONTRACTION_MAP = {
-    "it is":      "it's",
-    "you are":    "you're",
-    "they are":   "they're",
-    "we are":     "we're",
-    "I am":       "I'm",
-    "do not":     "don't",
-    "does not":   "doesn't",
-    "did not":    "didn't",
-    "will not":   "won't",
-    "can not":    "can't",
-    "cannot":     "can't",
-    "should not": "shouldn't",
-    "would not":  "wouldn't",
-    "could not":  "couldn't",
-    "have not":   "haven't",
-    "has not":    "hasn't",
-    "is not":     "isn't",
-    "are not":    "aren't",
-    "was not":    "wasn't",
-    "were not":   "weren't",
-    "that is":    "that's",
-    "there is":   "there's",
-    "here is":    "here's",
-    "you will":   "you'll",
-    "we will":    "we'll",
-    "it will":    "it'll",
-}
+human_processor = LinguisticHumaniser()
 
-FORMAL_MAP = {
-    "In conclusion,":               "So,",
-    "Furthermore,":                 "Also,",
-    "Moreover,":                    "On top of that,",
-    "Subsequently,":                "After that,",
-    "In addition,":                 "Plus,",
-    "It is important to note that": "Keep in mind that",
-    "It should be noted that":      "Worth noting that",
-    "In order to":                  "To",
-    "Due to the fact that":         "Because",
-    "At this point in time":        "Right now",
-    "In the event that":            "If",
-    "With regard to":               "About",
-    "Utilise":                      "Use",
-    "utilise":                      "use",
-    "Commence":                     "Start",
-    "commence":                     "start",
-    "Terminate":                    "End",
-    "terminate":                    "end",
-    "Endeavour":                    "Try",
-    "endeavour":                    "try",
-}
-
-
-def apply_rule_transforms(text: str) -> str:
-    for formal, natural in CONTRACTION_MAP.items():
-        text = text.replace(formal, natural)
-    for formal, natural in FORMAL_MAP.items():
-        text = text.replace(formal, natural)
-    sentences = re.split(r'(?<=[.!?])\s+', text)
-    result = []
-    for s in sentences:
-        if len(s.split()) > 40 and ", and " in s:
-            parts = s.split(", and ", 1)
-            result.append(parts[0] + ".")
-            result.append("And " + parts[1])
-        else:
-            result.append(s)
-    return " ".join(result)
-
-
-def humanise_with_llm(text: str) -> Optional[str]:
-    """Stage 2 —  Qwen 2.5 rewrite pass for natural conversational tone."""
-    instruction = (
-        "Rewrite the following AI-generated response to sound more natural and conversational, "
-        "like a knowledgeable friend explaining something clearly. "
-        "Use contractions, vary sentence length, write in second person where natural, "
-        "and remove unnecessarily formal phrases. "
-        "Keep all facts and meaning exactly the same. Do not add new information.\n\n"
-        f"Text:\n{text}\n\nRewritten version:"
-    )
-    try:
-        response = ollama.chat(
-            model=OLLAMA_MODEL,
-            messages=[{"role": "user", "content": instruction}],
-            options={"temperature": 0.7, "num_predict": 600}
-        )
-        return response["message"]["content"].strip()
-    except Exception as e:
-        print(f"Humanisation LLM error: {e}")
-        return None
-
-
-def humanise(text: str) -> dict:
-    """Full two-stage humanisation pipeline."""
-    stage1 = apply_rule_transforms(text)
-    stage2 = humanise_with_llm(stage1)
-    return {
-        "original":   text,
-        "rule_based": stage1,
-        "humanised":  stage2 if stage2 else stage1,
-        "used_llm":   stage2 is not None,
-    }
 
 
 # LLM GENERATION
@@ -396,14 +295,12 @@ async def generate(request: GenerateRequest):
     if not raw:
         raise HTTPException(status_code=500, detail="Failed to generate response from  Qwen 2.5.")
 
-    humanised = humanise(raw)
+    humanised = human_processor.humanise(raw)
 
     return {
         "session_id":          request.session_id,
         "raw_response":        raw,
         "humanised_response":  humanised["humanised"],
-        "rule_based_response": humanised["rule_based"],
-        "used_llm":            humanised["used_llm"],
         "refined_prompt":      prompt_to_use,
     }
 
