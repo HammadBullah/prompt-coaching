@@ -10,10 +10,12 @@ import json
 import re
 import os
 
-from clarification.evaluate_ml_analyzer import predict_missing_dimensions
-from clarification.clarification import get_clarification_questions, ClarificationQuestion
+from clarification.evaluate_ml_analyzer import predict_missing_dimensions, predict_with_confidence
+from clarification.clarification import SmartClarifier, get_clarification_questions, ClarificationQuestion
 from clarification.recustructor import reconstruct_prompt, score_prompt, ALL_DIMS
 from humanizer.humanizer import LinguisticHumaniser
+
+clarifier = SmartClarifier()
 
 app = FastAPI(
     title="PromptAI",
@@ -149,7 +151,6 @@ human_processor = LinguisticHumaniser()
 # LLM GENERATION
  
 def generate_response(prompt: str) -> Optional[str]:
-    """Generate a response from Qwen 2.5 via Ollama."""
     try:
         response = ollama.chat(
             model=OLLAMA_MODEL,
@@ -199,40 +200,65 @@ async def analyse(request: AnalyseRequest):
     missing = [m.lower().strip() for m in raw_missing] 
     
     quality_score = score_prompt(missing)
-    questions = get_clarification_questions(missing)
-
-    
-    all_dims = ["goal", "audience", "format", "constraints", "context"]
+    ALL_DIMS = ["goal", "audience", "format", "constraints", "context"]
     analysis = {d: d not in missing for d in ALL_DIMS}
-
-    session_id = str(uuid.uuid4())
-    db_create_session(session_id, prompt, missing)
-
-    if len(missing) == 0 or quality_score >= 80:
+    classifier_result = predict_with_confidence(prompt)
+    decision = clarifier.should_coach(prompt, classifier_result, quality_score)
+    
+    
+    if not decision.needs_coaching:
         session_id = str(uuid.uuid4())
-        refined = reconstruct_prompt(prompt, {}) 
+        refined = reconstruct_prompt(prompt, {})
+        
         db_create_session(session_id, prompt, [])
-        db_save_refined(session_id, refined) 
+        db_save_refined(session_id, refined)
         
         return {
-            "session_id":     session_id,
-            "quality_score":  100,
-            "analysis":       {d: True for d in ["goal", "audience", "format", "constraints", "context"]},
-            "missing":        [],
+            "session_id": session_id,
+            "quality_score": quality_score if quality_score >= 80 else 100,
+            "analysis": {d: True for d in ["goal", "audience", "format", "constraints", "context"]},
+            "missing": [],
             "needs_coaching": False,
             "refined_prompt": refined,
-            "message":        "Your prompt is already well-structured! Enhancing for maximum quality...",
+            "message": decision.reason + " Enhancing for maximum quality...",
         }
-
-    questions = get_clarification_questions(missing)
+    
+    
+    if clarifier._is_trivial(prompt):
+        session_id = str(uuid.uuid4())
+        
+        raw = generate_response(prompt)
+        humanised = human_processor.humanise(raw)
+        
+        db_create_session(session_id, prompt, [])
+        
+        return {
+            "session_id": session_id,
+            "quality_score": quality_score,
+            "analysis": {d: d not in missing for d in ["goal", "audience", "format", "constraints", "context"]},
+            "missing": missing,
+            "needs_coaching": False,  
+            "message": decision.reason,
+            "skip_coaching": True,  
+            "direct_response": humanised,
+            "raw_response": raw
+        }
+    
+    
+    session_id = str(uuid.uuid4())
+    db_create_session(session_id, prompt, missing)
+    
+    questions = decision.questions  
+    
     return {
         "session_id": session_id,
         "quality_score": quality_score,
-        "analysis": analysis,
+        "analysis": {d: d not in missing for d in ["goal", "audience", "format", "constraints", "context"]},
         "missing": missing,
         "needs_coaching": True,
         "next_question": questions[0] if questions else None,
-        "message": "I've identified some missing details to improve your prompt.",
+        "total_questions_available": len(questions),
+        "message": f"I've identified {len(questions)} detail(s) that could improve your prompt.",
     }
 
 
@@ -275,10 +301,7 @@ async def answer(request: AnswerRequest):
 
 @app.post("/api/prompt/generate")
 async def generate(request: GenerateRequest):
-    """
-    Takes the reconstructed refined prompt, sends it to  Qwen 2.5,
-    and returns a humanised response.
-    """
+
     session = db_get_session(request.session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found.")
@@ -307,10 +330,7 @@ async def generate(request: GenerateRequest):
 
 @app.post("/api/prompt/standard")
 async def standard(request: StandardRequest):
-    """
-    Sends prompt directly to  Qwen 2.5 without coaching.
-    Used for comparison in evaluation.
-    """
+
     if not check_ollama():
         return {"response": f"Ollama not running. Start with: ollama run {OLLAMA_MODEL}", "ollama_running": False}
 

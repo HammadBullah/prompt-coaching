@@ -28,3 +28,32 @@ def predict_missing_dimensions(text: str) -> List[str]:
             missing.append(label.capitalize())
     
     return missing
+
+def predict_with_confidence(prompt: str) -> dict:
+    """
+    Returns predictions with confidence scores for each dimension.
+    
+    Assumes your model outputs logits for 5 labels.
+    Adjust the model loading based on your actual implementation.
+    """
+
+    inputs = tokenizer(
+        prompt,
+        return_tensors="pt",
+        truncation=True,
+        max_length=512
+    )
+    
+    with torch.no_grad():
+        outputs = model(**inputs)
+        probs = torch.sigmoid(outputs.logits)  # Multi-label sigmoid
+    
+    dimensions = ["goal", "audience", "format", "constraints", "context"]
+    
+    result = {}
+    for i, dim in enumerate(dimensions):
+        prob = probs[0][i].item()
+        result[dim] = prob >= 0.5          # Prediction (bool)
+        result[f"{dim}_confidence"] = prob  # Confidence (0-1)
+    
+    return result
