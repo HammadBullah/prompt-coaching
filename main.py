@@ -13,9 +13,10 @@ import os
 from clarification.evaluate_ml_analyzer import predict_missing_dimensions, predict_with_confidence
 from clarification.clarification import SmartClarifier, get_clarification_questions, ClarificationQuestion
 from clarification.recustructor import reconstruct_prompt, score_prompt, ALL_DIMS
-from humanizer.humanizer import LinguisticHumaniser
+from humanizer.humanizer import LinguisticHumaniser, HumanizationPipeline
 
 clarifier = SmartClarifier()
+humanization_pipeline = HumanizationPipeline()
 
 app = FastAPI(
     title="PromptAI",
@@ -297,7 +298,7 @@ async def answer(request: AnswerRequest):
             "refined_prompt": refined, 
             "message": "Reconstruction complete. Generating Expert Response...",
         }
-
+        
 
 @app.post("/api/prompt/generate")
 async def generate(request: GenerateRequest):
@@ -318,12 +319,13 @@ async def generate(request: GenerateRequest):
     if not raw:
         raise HTTPException(status_code=500, detail="Failed to generate response from  Qwen 2.5.")
 
-    humanised = human_processor.humanise(raw)
+    humanised = humanization_pipeline.humanize(raw)
+    
 
     return {
         "session_id":          request.session_id,
         "raw_response":        raw,
-        "humanised_response":  humanised["humanised"],
+        "humanised_response":  humanised["final_output"],
         "refined_prompt":      prompt_to_use,
     }
 

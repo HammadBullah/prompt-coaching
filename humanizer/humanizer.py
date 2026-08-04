@@ -13,6 +13,105 @@ import re
 import random
 from typing import Dict, List
 
+# llm_polisher.py
+
+import requests
+import json
+
+class LLMPolisher:
+    """
+    Uses LLM to make AI-generated text sound more natural
+    and conversational before rule-based processing.
+    """
+    
+    def __init__(self, model: str = "qwen2.5", ollama_url: str = "http://127.0.0.1:11434"):
+        self.model = model
+        self.ollama_url = ollama_url
+    
+    def polish(self, text: str) -> str:
+        """
+        Rewrite AI text to sound more human/conversational.
+        """
+        
+        polish_prompt = f"""You are rewriting AI-generated text to sound more natural 
+and conversational, like a helpful human friend.
+
+RULES:
+- Keep the same meaning and information
+- Use contractions (don't, it's, you're, etc.)
+- Prefer simple words over complex ones
+- Sound warm and friendly, not robotic
+- Keep it natural, like chatting with a knowledgeable friend
+- Remove any overly formal or academic phrasing
+
+TEXT TO REWRITE:
+{text}
+
+Rewrite this text to sound natural and conversational:"""
+
+        try:
+            response = requests.post(
+                f"{self.ollama_url}/api/generate",
+                json={
+                    "model": self.model,
+                    "prompt": polish_prompt,
+                    "stream": False,
+                    "options": {
+                        "temperature": 0.7,
+                        "top_p": 0.9
+                    }
+                },
+                timeout=60
+            )
+            
+            result = response.json()
+            polished = result.get("response", "").strip()
+            
+            # Fallback to original if polish fails
+            return polished if polished else text
+            
+        except Exception as e:
+            print(f"LLM Polish failed: {e}")
+            return text
+    
+    def polish_with_context(self, text: str, context: str = "") -> str:
+        """
+        Polish with additional context about tone/style.
+        """
+        
+        context_instruction = ""
+        if context == "academic":
+            context_instruction = "Keep it informative but avoid excessive formality."
+        elif context == "casual":
+            context_instruction = "Make it super casual and friendly."
+        elif context == "professional":
+            context_instruction = "Keep it professional but still approachable."
+        
+        polish_prompt = f"""Rewrite this text to sound natural and conversational.
+{context_instruction}
+
+TEXT:
+{text}
+
+Rewrite naturally:"""
+
+        try:
+            response = requests.post(
+                f"{self.ollama_url}/api/generate",
+                json={
+                    "model": self.model,
+                    "prompt": polish_prompt,
+                    "stream": False
+                },
+                timeout=60
+            )
+            
+            return response.json().get("response", "").strip()
+            
+        except Exception as e:
+            print(f"LLM Polish failed: {e}")
+            return text
+
 # 1. MESSAGE PERSONALIZATION & CONTRACTIONS
 PERSONALIZATION_MAP = {
     r"\bit is\b": "it's",
@@ -54,16 +153,37 @@ TRANSITION_MAP = {
     r"\bConsequently\b": "As a result",
 }
 EXPANDED_HUMAN_MAP = {
-    # Vocabulary (Latinate -> Germanic)
+    # Vocabulary (Latinate → Germanic)
     r"\bpivotal\b": "really important",
     r"\badvancing\b": "moving forward",
     r"\bfoundational\b": "basic",
-    r"\bunderstanding this concept\b": "getting a handle on this",
+    r"\butilising\b": "using",
+    r"\butilise\b": "use",
     
-    # Structure (Softening the "AI list" feel)
+    # Structure (AI-formal → Human-conversational)
+    r"\bThis approach aims to\b": "This should help you",
+    r"\bI'll emphasize the importance of\b": "I'll touch on why",
+    r"\bethical considerations in\b": "ethics when building",
+    r"\bThroughout\b": "As we go through this",
+    r"\bSuch as\b": "like",
+    r"\bIn order to\b": "to",
+    r"\bIn terms of\b": "when it comes to",
+    r"\bIn particular\b": "especially",
+    r"\bIn this context\b": "here",
+    r"\bThe key takeaway\b": "So the main thing",
+    r"\bIt should be noted that\b": "Just so you know",
+    r"\bAs mentioned earlier\b": "Like I said",
+    r"\bIt is worth noting that\b": "It's worth knowing",
+    r"\bWith that said\b": "That said",
+    r"\bDue to the fact that\b": "Because",
+    r"\bOn the other hand\b": "But",
+    
+    # Softening authoritative AI tone
     r"\b1\. Supervised Learning:\b": "First, let's look at Supervised Learning:",
     r"\bDefinition:\b": "Basically,",
     r"\bTypes:\b": "This usually covers",
+    r"\bClassification:\b": "Classification is when:",
+    r"\bRegression:\b": "Regression is when:",
 }
 
 # CONTEXTUAL HEDGING (Softening authoritative tone)
@@ -82,7 +202,7 @@ WELL_WISHING = [
 ]
 
 class LinguisticHumaniser:
-    def _apply_heuristic_rules(self, text: str) -> str:
+    def apply_heuristic_rules(self, text: str) -> str:
         processed = text
         
         # 1. Apply Hedging & Softeners
@@ -115,9 +235,58 @@ class LinguisticHumaniser:
         return processed
 
     def humanise(self, text: str) -> Dict[str, any]:
-        final_text = self._apply_heuristic_rules(text)
+        final_text = self.apply_heuristic_rules(text)
         return {
             "original": text,
             "humanised": final_text,
             "method": "CHV-Taxonomy-Heuristic-Only"
         }
+        
+class HumanizationPipeline:
+    """
+    Complete humanisation pipeline:
+    LLM Response → LLM Polish → Rule-Based Humaniser → Final Output
+    """
+    
+    def __init__(self):
+        self.llm_polisher = LLMPolisher()
+        self.linguistic_humaniser = LinguisticHumaniser()
+    
+    def humanize(self, llm_response: str) -> Dict[str, any]:
+        """
+        Full pipeline: polish with LLM, then apply rule-based humanisation.
+        
+        Returns detailed stats about each stage.
+        """
+        
+        # Stage 1: LLM Polish (makes it conversational)
+        llm_polished = self.llm_polisher.polish(llm_response)
+        
+        # Stage 2: Rule-Based Humanisation (catches remaining formal language)
+        rule_humanised = self.linguistic_humaniser.apply_heuristic_rules(llm_polished)
+        
+        return {
+            "stage_1_llm_polished": llm_polished,
+            "stage_2_rule_humanised": rule_humanised,
+            "final_output": rule_humanised,
+            "stats": {
+                "original_length": len(llm_response),
+                "after_llm_polish": len(llm_polished),
+                "final_length": len(rule_humanised),
+                "stages_completed": 2
+            },
+            "method": "LLM-Polish → Rule-Based"
+        }
+    
+    def humanize_quick(self, llm_response: str) -> str:
+        """
+        Quick version: just rule-based (faster, no LLM call).
+        Use for testing or when speed matters.
+        """
+        return self.linguistic_humaniser.apply_heuristic_rules(llm_response)
+    
+    def humanize_llm_only(self, llm_response: str) -> str:
+        """
+        LLM polish only (no rule-based).
+        """
+        return self.llm_polisher.polish(llm_response)

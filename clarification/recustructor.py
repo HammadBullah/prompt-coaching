@@ -40,7 +40,7 @@ def _ai_refine(skeleton: str) -> str:
 
     instruction = (
         "You are an expert Prompt Engineer. I will give you a structured set of components. "
-        "Rewrite them into one cohesive, professional, and high-performance prompt. "
+        "Rewrite them into one cohesive, professional, and high-performance prompt. Only the information provided should be used. Do not add any new information or assumptions. "
         "Do NOT answer the prompt. ONLY output the refined prompt text with all the dimenstions strictly following.\n\n"
         f"STRUCTURED COMPONENTS:\n{skeleton}\n\n"
         "REFINED EXPERT PROMPT:"
