@@ -29,18 +29,6 @@ for item in raw_data:
     for i, dim in enumerate(dims):
         counts[i] += int(bool(item["labels"][dim]))
 
-weights = []
-print("Class weights:")
-weights = []
-print("Class weights:")
-for i, dim in enumerate(dims):
-    pos = counts[i]
-    neg = total - pos
-    w = round(math.sqrt(neg / pos), 2) if pos > 0 else 1.0
-    weights.append(w)
-    print(f"  {dim:<14}: pos={pos}, neg={neg}, weight={w}")
-
-class_weights = torch.tensor(weights, dtype=torch.float)
 
 def preprocess(example):
     return {
@@ -110,7 +98,7 @@ training_args = TrainingArguments(
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
-    num_train_epochs=8,
+    num_train_epochs=12,
     weight_decay=0.01,
     logging_dir="./logs",
     dataloader_pin_memory=False
@@ -120,11 +108,11 @@ training_args = TrainingArguments(
 def compute_class_weights(train_dataset):
     dims = ["goal", "audience", "format", "constraints", "context"]
     counts = [0, 0, 0, 0, 0]
-    total = 0
+    total = len(train_dataset)
 
     for item in train_dataset:
         labels = item["labels"]
-        
+        # Handle different label formats
         if isinstance(labels, dict):
             label_list = [float(labels[d]) for d in dims]
         elif hasattr(labels, "tolist"):
@@ -134,16 +122,25 @@ def compute_class_weights(train_dataset):
         
         for i, val in enumerate(label_list):
             counts[i] += int(round(float(val)))
-        total += 1
 
     weights = []
-    print("Class weights:")
+    print("Adjusted Class weights:")
     for i, dim in enumerate(dims):
         pos = counts[i]
         neg = total - pos
-        w = neg / pos if pos > 0 else 1.0
+        
+        if pos > 0:
+            # REMOVE sqrt() to make weights more aggressive for minority classes
+            # Use a linear ratio: total_neg / total_pos
+            w = neg / pos 
+            
+            # Cap the weight so it doesn't explode (optional, e.g., max 50.0)
+            w = min(w, 50.0) 
+        else:
+            w = 1.0
+            
         weights.append(w)
-        print(f"  {dim:<14}: pos={pos}, neg={neg}, weight={w:.2f}")
+        print(f"  {dim:<14}: pos={pos}, weight={w:.2f}")
 
     return torch.tensor(weights, dtype=torch.float)
 
@@ -188,6 +185,10 @@ def get_predictions(model, dataset, device):
     loader = DataLoader(dataset, batch_size=16)
     y_true, y_pred, y_prob = [], [], []
     
+    # Custom thresholds for each dimension to balance Precision/Recall
+    # Standard: 0.5. For rare classes: 0.2 - 0.3
+    thresholds = [0.5, 0.4, 0.4, 0.25, 0.3] 
+
     for batch in loader:
         inputs = {
             "input_ids": batch["input_ids"].to(device),
@@ -195,10 +196,16 @@ def get_predictions(model, dataset, device):
         }
         with torch.no_grad():
             logits = model(**inputs).logits
-            probs = torch.sigmoid(logits).cpu()
-        preds = (probs > 0.5).int()
+            probs = torch.sigmoid(logits).cpu().numpy()
+        
+        # Apply per-label thresholds
+        batch_preds = []
+        for prob_row in probs:
+            row_preds = [1 if prob_row[i] > thresholds[i] else 0 for i in range(5)]
+            batch_preds.append(row_preds)
+            
         y_true.extend(batch["labels"].int().tolist())
-        y_pred.extend(preds.tolist())
+        y_pred.extend(batch_preds)
         y_prob.extend(probs.tolist())
     
     return np.array(y_true), np.array(y_pred), np.array(y_prob)

@@ -1,13 +1,22 @@
 import torch
+import os
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-from typing import List, Dict
+from typing import List
 
-model_path = "./prompt_classifier"
+# 1. Robust path logic to find the model at the project root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+model_path = os.path.join(BASE_DIR, "prompt_classifier")
+
+print(f"--- Loading model from: {model_path} ---")
+
 tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
 model = DistilBertForSequenceClassification.from_pretrained(model_path)
 
 labels = ["goal", "audience", "format", "constraints", "context"]
-thresholds = [0.3, 0.5, 0.5, 0.6, 0.4]
+
+# 2. Optimized thresholds to improve RECALL for minority classes
+# We lower the bar for 'constraints' and 'context' so the model picks them up easier
+thresholds = [0.3, 0.4, 0.4, 0.2, 0.3] 
 
 def predict_missing_dimensions(text: str) -> List[str]:
     inputs = tokenizer(
@@ -18,6 +27,7 @@ def predict_missing_dimensions(text: str) -> List[str]:
         max_length=512
     )
     
+    model.eval()
     with torch.no_grad():
         logits = model(**inputs).logits
         probs = torch.sigmoid(logits)[0]
@@ -25,35 +35,6 @@ def predict_missing_dimensions(text: str) -> List[str]:
     missing = []
     for label, prob, threshold in zip(labels, probs, thresholds):
         if prob.item() < threshold:
-            missing.append(label.capitalize())
-    
+            missing.append(label.lower()) # Keep it lowercase for system consistency
+            
     return missing
-
-def predict_with_confidence(prompt: str) -> dict:
-    """
-    Returns predictions with confidence scores for each dimension.
-    
-    Assumes your model outputs logits for 5 labels.
-    Adjust the model loading based on your actual implementation.
-    """
-
-    inputs = tokenizer(
-        prompt,
-        return_tensors="pt",
-        truncation=True,
-        max_length=512
-    )
-    
-    with torch.no_grad():
-        outputs = model(**inputs)
-        probs = torch.sigmoid(outputs.logits)  # Multi-label sigmoid
-    
-    dimensions = ["goal", "audience", "format", "constraints", "context"]
-    
-    result = {}
-    for i, dim in enumerate(dimensions):
-        prob = probs[0][i].item()
-        result[dim] = prob >= 0.5          # Prediction (bool)
-        result[f"{dim}_confidence"] = prob  # Confidence (0-1)
-    
-    return result
