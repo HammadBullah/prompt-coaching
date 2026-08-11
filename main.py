@@ -12,7 +12,7 @@ import os
 
 from clarification.evaluate_ml_analyzer import predict_missing_dimensions, predict_with_confidence
 from clarification.clarification import SmartClarifier, get_clarification_questions, ClarificationQuestion
-from clarification.recustructor import reconstruct_prompt, score_prompt, ALL_DIMS
+from clarification.reconstructor import reconstruct_prompt, score_prompt, ALL_DIMS
 from humanizer.humanizer import LinguisticHumaniser, HumanizationPipeline
 
 clarifier = SmartClarifier()
@@ -391,4 +391,4 @@ async def get_session(session_id: str):
  
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

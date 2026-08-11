@@ -38,3 +38,30 @@ def predict_missing_dimensions(text: str) -> List[str]:
             missing.append(label.lower()) # Keep it lowercase for system consistency
             
     return missing
+
+
+def predict_with_confidence(text: str) -> dict:
+    """
+    Returns a dictionary mapping each dimension to its prediction (bool)
+    and raw confidence score (float).
+    """
+    inputs = tokenizer(
+        text,
+        return_tensors="pt",
+        truncation=True,
+        padding=True,
+        max_length=512
+    )
+
+    model.eval()
+    with torch.no_grad():
+        logits = model(**inputs).logits
+        probs = torch.sigmoid(logits)[0]
+
+    result = {}
+    for label, prob, threshold in zip(labels, probs, thresholds):
+        # A dimension is 'PRESENT' if its probability meets the threshold
+        result[label] = prob.item() >= threshold
+        result[f"{label}_confidence"] = prob.item()
+
+    return result

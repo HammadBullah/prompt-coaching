@@ -1,112 +1,99 @@
-import sqlite3
+import sys
+import os
 import json
 import ollama
-import pandas as pd
-import os
 
-# Configuration
-TEST_MODEL = "qwen2.5:1.5b" 
-JUDGE_MODEL = "qwen2.5:1.5b" # Use a larger model here if possible for the final report!
-DB_PATH = "/Users/hammadsafi/Downloads/prompt coaching/sessions.db"
-OUTPUT_DIR = "results"
-OUTPUT_PATH = f"{OUTPUT_DIR}/rq3_win_rate_results.csv"
+# 1. Setup paths to import your existing logic
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 
-def get_judge_verdict(prompt: str, resp_a: str, resp_b: str) -> str:
-    """
-    Asks the Judge LLM to pick a winner between Standard (A) and Coached (B).
-    """
-    judge_system_prompt = (
-        "You are an expert academic judge evaluating AI response quality. "
-        "You will see a user's original prompt and two different AI responses.\n\n"
-        "Evaluation Criteria:\n"
-        "1. Helpfulness: Does the response provide exactly what is needed?\n"
-        "2. Detail: Does it follow all context and constraints provided?\n"
-        "3. Tone: Is it conversational and coaching-oriented (natural)?\n\n"
-        "Rules:\n"
-        "- Response A is a direct answer to the vague prompt.\n"
-        "- Response B is an answer generated after a coaching process.\n\n"
-        "Output ONLY the letter 'A', 'B', or the word 'TIE'."
-    )
-    
-    judge_user_message = (
-        f"USER ORIGINAL PROMPT: {prompt}\n\n"
-        f"RESPONSE A (Standard):\n{resp_a}\n\n"
-        f"RESPONSE B (Coached & Humanised):\n{resp_b}\n\n"
-        "WINNER (A/B/TIE):"
-    )
+from clarification.evaluate_ml_analyzer import predict_missing_dimensions
+from clarification.recustructor import reconstruct_prompt
+from humanizer.humanizer import LinguisticHumaniser
 
-    try:
-        response = ollama.chat(
-            model=JUDGE_MODEL,
-            messages=[
-                {"role": "system", "content": judge_system_prompt},
-                {"role": "user", "content": judge_user_message}
-            ],
-            options={"temperature": 0.1}
-        )
-        verdict = response["message"]["content"].strip().upper()
-        if "B" in verdict and "A" not in verdict: return "B" # Coached Win
-        if "A" in verdict and "B" not in verdict: return "A" # Standard Win
-        return "TIE"
-    except Exception as e:
-        print(f"Judging error: {e}")
-        return "ERROR"
+# Initialize
+human_processor = LinguisticHumaniser()
+TEST_MODEL = "qwen2.5:1.5b"
+OUTPUT_FILE = "results/rq3_raw_data.json"
 
-def evaluate_rq3():
-    if not os.path.exists(DB_PATH):
-        print(f"Error: {DB_PATH} not found.")
-        return
+# COMMON DIMENSION SPECIFICATIONS (The 'Expert Profile')
+# These ensure every coached prompt is high-density.
+COMMON_ANSWERS = {
+    "goal": "Provide a comprehensive overview",
+    "audience": "poeple",
+    "format": "paragraph",
+    "constraints": "Keep the tone professional yet coaching-oriented, and ensure the length is around 300 words.",
+    "context": "This is for prompt specifc people"
+}
 
-    conn = sqlite3.connect(DB_PATH)
-    query = "SELECT original_prompt, refined_prompt, humanised_response FROM sessions WHERE status='complete'"
-    df = pd.read_sql_query(query, conn)
-    conn.close()
+test_prompts = [
+    "Write a report about AI",
+    "Explain machine learning",
+    "Plan a trip to Japan",
+    "Write a Python function to sort data",
+    "Create a marketing strategy",
+    "Help me write an email to my boss",
+    "Explain how a car engine works",
+    "Write a business plan",
+    "Give me advice on losing weight",
+    "Write a short story about a robot",
+]
 
-    if df.empty:
-        print("No completed sessions found in database to evaluate.")
-        return
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+def generate_data():
     results = []
-    
-    print(f"Evaluating {len(df)} completed sessions...")
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
 
-    for i, row in df.iterrows():
-        print(f"Processing session {i+1}...")
+    print(f"--- STARTING AUTONOMOUS RQ3 EVALUATION ---")
+
+    for i, original_prompt in enumerate(test_prompts):
+        print(f"\n[{i+1}/{len(test_prompts)}] Processing: {original_prompt}")
         
-        # 1. Generate Standard Response (Uncoached) from original prompt
-        try:
-            standard_resp_raw = ollama.chat(
-                model=TEST_MODEL,
-                messages=[{"role": "user", "content": row['original_prompt']}]
-            )
-            standard_resp = standard_resp_raw["message"]["content"]
-        except:
-            standard_resp = "Error generating standard response."
+        # --- PHASE 1: STANDARD PASS ---
+        print("   > Generating Standard Response...")
+        std_resp = ollama.chat(
+            model=TEST_MODEL,
+            messages=[{"role": "user", "content": original_prompt}]
+        )["message"]["content"]
 
-        # 2. Get Coached Response from DB (this is already humanised)
-        coached_resp = row['humanised_response']
+        # --- PHASE 2: COACHED PASS ---
+        print("   > Analyzing dimensions...")
+        missing = [m.lower().strip() for m in predict_missing_dimensions(original_prompt)]
+        
+        # Automatically fill missing dimensions from our Expert Profile
+        answers = {dim: COMMON_ANSWERS.get(dim, "Provide more detail.") for dim in missing}
+        
+        print(f"   > Automatically added specifications for: {list(answers.keys())}")
+        
+        # A. Reconstruct using your logic
+        refined_prompt = reconstruct_prompt(original_prompt, answers)
+        
+        # B. Generate from refined prompt
+        print("   > Generating Coached Response...")
+        coached_raw = ollama.chat(
+            model=TEST_MODEL,
+            messages=[{"role": "user", "content": refined_prompt}]
+        )["message"]["content"]
+        
+        # C. Humanise using your module
+        humanised_data = human_processor.humanise(coached_raw)
+        coached_final = humanised_data["humanised"]
 
-        # 3. Judge
-        verdict = get_judge_verdict(row['original_prompt'], standard_resp, coached_resp)
+        # --- PHASE 3: STORE ---
+        item = {
+            "id": i + 1,
+            "original_prompt": original_prompt,
+            "dimensions_detected_missing": missing,
+            "refined_prompt": refined_prompt,
+            "response_standard": std_resp,
+            "response_coached": coached_final
+        }
+        results.append(item)
+        
+        # Save progress
+        with open(OUTPUT_FILE, "w") as f:
+            json.dump(results, f, indent=2)
 
-        results.append({
-            "Session": i + 1,
-            "Verdict": verdict,
-            "Standard_Win": 1 if verdict == "A" else 0,
-            "Coached_Win": 1 if verdict == "B" else 0,
-            "Tie": 1 if verdict == "TIE" else 0
-        })
-
-    results_df = pd.DataFrame(results)
-    results_df.to_csv(OUTPUT_PATH, index=False)
-
-    print("="*40)
-    print("RQ3 EVALUATION COMPLETE")
-    print(f"Samples Evaluated: {len(results_df)}")
-    print(f"Coached Win Rate: {(results_df['Coached_Win'].sum() / len(results_df)) * 100:.1f}%")
-    print(f"Detailed results saved to: {OUTPUT_PATH}")
-    print("="*40)
+    print(f"\n--- SUCCESS! ALL 20 SAMPLES SAVED TO {OUTPUT_FILE} ---")
 
 if __name__ == "__main__":
-    evaluate_rq3()
+    generate_data()
