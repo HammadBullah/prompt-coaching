@@ -1,30 +1,12 @@
-"""
-PromptAI — Humanisation Module (Rule-Based Only)
-Objective 4: Humanising AI Responses through Linguistic Transformation
-
-Academic Foundation:
-1. Liebrecht, C., et al. (2021). "Linguistic elements of conversational human voice 
-   in online brand communication: Manipulations and perceptions."
-2. Liebrecht, C., et al. (2021). "Too Informal? How a Chatbot’s Communication 
-   Style Affects Brand Attitude and Quality of Interaction."
-"""
-
 import re
 import random
 from typing import Dict, List
-
-# llm_polisher.py
 
 import requests
 import json
 
 class LLMPolisher:
-    """
-    Uses LLM to make AI-generated text sound more natural
-    and conversational before rule-based processing.
-    """
-    
-    def __init__(self, model: str = "qwen2.5", ollama_url: str = "http://127.0.0.1:11434"):
+    def __init__(self, model: str = "qwen2.5:1.5b", ollama_url: str = "http://127.0.0.1:11434"):
         self.model = model
         self.ollama_url = ollama_url
     
@@ -112,7 +94,6 @@ Rewrite naturally:"""
             print(f"LLM Polish failed: {e}")
             return text
 
-# 1. MESSAGE PERSONALIZATION & CONTRACTIONS
 PERSONALIZATION_MAP = {
     r"\bit is\b": "it's",
     r"\byou are\b": "you're",
@@ -143,7 +124,6 @@ PHRASAL_VERB_MAP = {
     r"\brequire\b": "need",
 }
 
-# 3. INVITATIONAL RHETORIC & TRANSITIONS
 TRANSITION_MAP = {
     r"\bIn conclusion\b": "So",
     r"\bFurthermore\b": "Also",
@@ -153,14 +133,12 @@ TRANSITION_MAP = {
     r"\bConsequently\b": "As a result",
 }
 EXPANDED_HUMAN_MAP = {
-    # Vocabulary (Latinate → Germanic)
     r"\bpivotal\b": "really important",
     r"\badvancing\b": "moving forward",
     r"\bfoundational\b": "basic",
     r"\butilising\b": "using",
     r"\butilise\b": "use",
     
-    # Structure (AI-formal → Human-conversational)
     r"\bThis approach aims to\b": "This should help you",
     r"\bI'll emphasize the importance of\b": "I'll touch on why",
     r"\bethical considerations in\b": "ethics when building",
@@ -178,7 +156,6 @@ EXPANDED_HUMAN_MAP = {
     r"\bDue to the fact that\b": "Because",
     r"\bOn the other hand\b": "But",
     
-    # Softening authoritative AI tone
     r"\b1\. Supervised Learning:\b": "First, let's look at Supervised Learning:",
     r"\bDefinition:\b": "Basically,",
     r"\bTypes:\b": "This usually covers",
@@ -186,14 +163,12 @@ EXPANDED_HUMAN_MAP = {
     r"\bRegression:\b": "Regression is when:",
 }
 
-# CONTEXTUAL HEDGING (Softening authoritative tone)
 HEDGING_RULES = {
     r"\bThe first step involves\b": "I usually start by",
     r"\bIt is essential to\b": "You might want to",
     r"\bThe goal is to\b": "What we're looking to do is",
 }
 
-# WELL-WISHING CLOSINGS
 WELL_WISHING = [
     "Have a great day!",
     "Hope this helps you out!",
@@ -205,16 +180,13 @@ class LinguisticHumaniser:
     def apply_heuristic_rules(self, text: str) -> str:
         processed = text
         
-        # 1. Apply Hedging & Softeners
         for pattern, replacement in HEDGING_RULES.items():
             processed = re.sub(pattern, replacement, processed, flags=re.IGNORECASE)
 
-        # 2. Apply all linguistic maps
         all_rules = {**PERSONALIZATION_MAP, **PHRASAL_VERB_MAP, **TRANSITION_MAP, **EXPANDED_HUMAN_MAP}
         for pattern, replacement in all_rules.items():
             processed = re.sub(pattern, replacement, processed, flags=re.IGNORECASE)
         
-        # 3. Prosody Control: Break long sentences
         sentences = re.split(r'(?<=[.!?])\s+', processed)
         varied_sentences = []
         for s in sentences:
@@ -226,7 +198,6 @@ class LinguisticHumaniser:
         
         processed = " ".join(varied_sentences)
         
-        # 4. Add Well-wishing closing
         if not any(w.lower() in processed.lower() for w in WELL_WISHING):
             processed = processed.strip()
             if not processed.endswith(('.', '!', '?')): processed += "."
@@ -243,26 +214,16 @@ class LinguisticHumaniser:
         }
         
 class HumanizationPipeline:
-    """
-    Complete humanisation pipeline:
-    LLM Response → LLM Polish → Rule-Based Humaniser → Final Output
-    """
-    
+
     def __init__(self):
         self.llm_polisher = LLMPolisher()
         self.linguistic_humaniser = LinguisticHumaniser()
     
     def humanize(self, llm_response: str) -> Dict[str, any]:
-        """
-        Full pipeline: polish with LLM, then apply rule-based humanisation.
+    
         
-        Returns detailed stats about each stage.
-        """
-        
-        # Stage 1: LLM Polish (makes it conversational)
         llm_polished = self.llm_polisher.polish(llm_response)
         
-        # Stage 2: Rule-Based Humanisation (catches remaining formal language)
         rule_humanised = self.linguistic_humaniser.apply_heuristic_rules(llm_polished)
         
         return {
@@ -279,14 +240,9 @@ class HumanizationPipeline:
         }
     
     def humanize_quick(self, llm_response: str) -> str:
-        """
-        Quick version: just rule-based (faster, no LLM call).
-        Use for testing or when speed matters.
-        """
+
         return self.linguistic_humaniser.apply_heuristic_rules(llm_response)
     
     def humanize_llm_only(self, llm_response: str) -> str:
-        """
-        LLM polish only (no rule-based).
-        """
+  
         return self.llm_polisher.polish(llm_response)

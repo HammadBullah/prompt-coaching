@@ -3,7 +3,6 @@ import os
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 from typing import List
 
-# 1. Robust path logic to find the model at the project root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model_path = os.path.join(BASE_DIR, "prompt_classifier")
 
@@ -14,8 +13,6 @@ model = DistilBertForSequenceClassification.from_pretrained(model_path)
 
 labels = ["goal", "audience", "format", "constraints", "context"]
 
-# 2. Optimized thresholds to improve RECALL for minority classes
-# We lower the bar for 'constraints' and 'context' so the model picks them up easier
 thresholds = [0.3, 0.4, 0.4, 0.2, 0.3] 
 
 def predict_missing_dimensions(text: str) -> List[str]:

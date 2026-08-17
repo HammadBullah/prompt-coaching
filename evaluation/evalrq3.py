@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 from clarification.evaluate_ml_analyzer import predict_missing_dimensions
-from clarification.recustructor import reconstruct_prompt
+from clarification.reconstructor import reconstruct_prompt
 from humanizer.humanizer import LinguisticHumaniser
 
 # Initialize

@@ -104,7 +104,6 @@ training_args = TrainingArguments(
     dataloader_pin_memory=False
 )
 
-# Calculate class weights from your training data
 def compute_class_weights(train_dataset):
     dims = ["goal", "audience", "format", "constraints", "context"]
     counts = [0, 0, 0, 0, 0]
@@ -112,7 +111,6 @@ def compute_class_weights(train_dataset):
 
     for item in train_dataset:
         labels = item["labels"]
-        # Handle different label formats
         if isinstance(labels, dict):
             label_list = [float(labels[d]) for d in dims]
         elif hasattr(labels, "tolist"):
@@ -130,11 +128,9 @@ def compute_class_weights(train_dataset):
         neg = total - pos
         
         if pos > 0:
-            # REMOVE sqrt() to make weights more aggressive for minority classes
-            # Use a linear ratio: total_neg / total_pos
+
             w = neg / pos 
             
-            # Cap the weight so it doesn't explode (optional, e.g., max 50.0)
             w = min(w, 50.0) 
         else:
             w = 1.0
@@ -144,7 +140,6 @@ def compute_class_weights(train_dataset):
 
     return torch.tensor(weights, dtype=torch.float)
 
-# Custom trainer with weighted loss
 class WeightedTrainer(Trainer):
     def __init__(self, class_weights, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -185,8 +180,6 @@ def get_predictions(model, dataset, device):
     loader = DataLoader(dataset, batch_size=16)
     y_true, y_pred, y_prob = [], [], []
     
-    # Custom thresholds for each dimension to balance Precision/Recall
-    # Standard: 0.5. For rare classes: 0.2 - 0.3
     thresholds = [0.5, 0.4, 0.4, 0.25, 0.3] 
 
     for batch in loader:

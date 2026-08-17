@@ -38,7 +38,6 @@ class SmartClarifier:
         humanizer_score: Optional[float] = None
     ) -> CoachingDecision:
         
-        # Rule 1: Skip trivial inputs
         if self._is_trivial(prompt):
             quality_score = self._calculate_quality_score(analysis)
             return CoachingDecision(
@@ -48,7 +47,6 @@ class SmartClarifier:
                 quality_score=quality_score  # ← Added
             )
         
-        # Rule 2: Skip if already comprehensive
         if self._is_comprehensive(prompt):
             quality_score = self._calculate_quality_score(analysis)
             return CoachingDecision(
@@ -67,7 +65,6 @@ class SmartClarifier:
                 quality_score=humanizer_score  # ← Added
             )
         
-        # Find missing dimensions with low confidence
         questions_to_ask = self._get_smart_questions(analysis)
         quality_score = self._calculate_quality_score(analysis)
         
@@ -76,14 +73,14 @@ class SmartClarifier:
                 needs_coaching=False,
                 reason="No clarification needed",
                 questions=[],
-                quality_score=quality_score  # ← Added
+                quality_score=quality_score
             )
         
         return CoachingDecision(
             needs_coaching=True,
             reason=f"Coaching needed - {len(questions_to_ask)} dimension(s) to clarify",
             questions=questions_to_ask,
-            quality_score=quality_score  # ← Added
+            quality_score=quality_score
         )
     
     def _is_trivial(self, prompt: str) -> bool:

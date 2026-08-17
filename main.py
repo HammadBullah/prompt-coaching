@@ -133,11 +133,9 @@ class StandardRequest(BaseModel):
     prompt: str
 
 class PromptRequest(BaseModel):
-    """Legacy support — kept for compatibility"""
     prompt: str
     mode: str = "standard"
 class ChatRequest(BaseModel):
-    """Legacy support — kept for compatibility"""
     prompt: str
     mode: str = "standard"
     clarification_answers: Optional[Dict[str, str]] = None
@@ -147,9 +145,6 @@ class ChatRequest(BaseModel):
 
 human_processor = LinguisticHumaniser()
 
-
-
-# LLM GENERATION
  
 def generate_response(prompt: str) -> Optional[str]:
     try:
@@ -171,8 +166,6 @@ def check_ollama() -> bool:
     except Exception:
         return False
 
-
-# ENDPOINTS
  
 @app.get("/")
 async def root():
