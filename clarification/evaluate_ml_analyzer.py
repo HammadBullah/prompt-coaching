@@ -38,10 +38,7 @@ def predict_missing_dimensions(text: str) -> List[str]:
 
 
 def predict_with_confidence(text: str) -> dict:
-    """
-    Returns a dictionary mapping each dimension to its prediction (bool)
-    and raw confidence score (float).
-    """
+
     inputs = tokenizer(
         text,
         return_tensors="pt",
@@ -57,7 +54,6 @@ def predict_with_confidence(text: str) -> dict:
 
     result = {}
     for label, prob, threshold in zip(labels, probs, thresholds):
-        # A dimension is 'PRESENT' if its probability meets the threshold
         result[label] = prob.item() >= threshold
         result[f"{label}_confidence"] = prob.item()
 

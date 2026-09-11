@@ -121,7 +121,7 @@ def print_report(results):
 
 def main():
     if not os.path.exists(LABELLED_FILE):
-        print(f"❌ Could not find {LABELLED_FILE}")
+        print(f" Could not find {LABELLED_FILE}")
         print("Make sure labelled_dataset.json is in the same folder as this script.")
         return
 
@@ -133,7 +133,7 @@ def main():
 
     with open(RESULTS_FILE, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"\n✅ Full results saved to {RESULTS_FILE}")
+    print(f"\n Full results saved to {RESULTS_FILE}")
 
 
 if __name__ == "__main__":

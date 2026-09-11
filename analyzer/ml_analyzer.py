@@ -7,7 +7,7 @@ from transformers import DistilBertTokenizerFast
 from torch import nn
 from transformers import DistilBertForSequenceClassification
 from sklearn.metrics import f1_score, hamming_loss, accuracy_score, confusion_matrix
-from transformers import Trainer
+from transformers import Trainer, TrainingArguments
 from torch.utils.data import DataLoader
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
@@ -89,7 +89,6 @@ def compute_metrics(eval_pred):
         "f1_macro": f1_score(labels, preds, average="macro"),
     }
 
-from transformers import TrainingArguments
 
 training_args = TrainingArguments(
     output_dir="./results",
@@ -191,7 +190,6 @@ def get_predictions(model, dataset, device):
             logits = model(**inputs).logits
             probs = torch.sigmoid(logits).cpu().numpy()
         
-        # Apply per-label thresholds
         batch_preds = []
         for prob_row in probs:
             row_preds = [1 if prob_row[i] > thresholds[i] else 0 for i in range(5)]

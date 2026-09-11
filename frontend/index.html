@@ -849,7 +849,6 @@
 
     try {
 
-      // Standard mode: send directly to LLM
       if (mode === 'standard') {
         const r = await fetch(`${API}/api/prompt/standard`, {
           method: 'POST',
@@ -965,13 +964,11 @@
     el.className = 'rtext live';
   }
 
-  // ── Suggestion chips ──────────────────────────
   function use(txt) {
     document.getElementById('chat-input').value = txt;
     send();
   }
 
-  // ── Reset session ─────────────────────────────
   function reset() {
     sessionId = null;
     currentDim = null;

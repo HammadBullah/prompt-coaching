@@ -1,4 +1,3 @@
-# clarification.py
 from pydantic import BaseModel
 from typing import List, Optional
 import re
@@ -14,11 +13,10 @@ class CoachingDecision(BaseModel):
     needs_coaching: bool
     reason: str
     questions: List[ClarificationQuestion]
-    quality_score: float  # ← This was missing
+    quality_score: float
 
 
 class SmartClarifier:
-    """Smart clarification logic - decides WHEN and WHAT to ask"""
     
     def __init__(self):
         self.priority_map = {
@@ -44,7 +42,7 @@ class SmartClarifier:
                 needs_coaching=False,
                 reason="Trivial input - direct response generated",
                 questions=[],
-                quality_score=quality_score  # ← Added
+                quality_score=quality_score
             )
         
         if self._is_comprehensive(prompt):
@@ -53,16 +51,15 @@ class SmartClarifier:
                 needs_coaching=False,
                 reason="Prompt is well-structured",
                 questions=[],
-                quality_score=quality_score  # ← Added
+                quality_score=quality_score 
             )
         
-        # Rule 3: Skip if quality score is already high
         if humanizer_score and humanizer_score >= 80:
             return CoachingDecision(
                 needs_coaching=False,
                 reason="High prompt quality detected",
                 questions=[],
-                quality_score=humanizer_score  # ← Added
+                quality_score=humanizer_score
             )
         
         questions_to_ask = self._get_smart_questions(analysis)
@@ -96,7 +93,7 @@ class SmartClarifier:
             'maybe', 'perhaps',
             'help', 'please',
             'wtf', 'omg', 'lol', 'haha', 'lmao', 'rofl', 'brb', 'ttyl', 'idk', 'smh', 
-            'how are you', 'what\'s up', 'whats up', 'sup', 'wazzup', 'yo', 'hey there', 'hi there'
+            'how are you', 'what\'s up', 'whats up', 'sup', 'wazzup', 'yo', 'hey there', 'hi there', 'How r u'
         }
         
         if prompt_lower in trivial_words:

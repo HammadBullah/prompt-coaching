@@ -35,8 +35,6 @@ app.add_middleware(
 OLLAMA_MODEL = "qwen2.5:1.5b"
 
 
-
-
 DB_PATH = os.path.join(os.path.dirname(__file__), "sessions.db")
 
 

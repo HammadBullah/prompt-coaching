@@ -57,9 +57,6 @@ Rewrite this text to sound natural and conversational:"""
             return text
     
     def polish_with_context(self, text: str, context: str = "") -> str:
-        """
-        Polish with additional context about tone/style.
-        """
         
         context_instruction = ""
         if context == "academic":
@@ -107,7 +104,6 @@ PERSONALIZATION_MAP = {
     r"\bthey are\b": "they're",
 }
 
-# 2. INFORMAL SPEECH (Lexical Shift: Latinate -> Germanic)
 PHRASAL_VERB_MAP = {
     r"\butilise\b": "use",
     r"\bcommence\b": "start",
