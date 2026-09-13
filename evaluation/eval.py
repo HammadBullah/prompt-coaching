@@ -4,12 +4,10 @@ import sys
 import os
 from sklearn.metrics import classification_report
 
-# Ensure imports work
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 from clarification.evaluate_ml_analyzer import predict_missing_dimensions
 
-# Path to the NEW test set we just created
 DATASET_PATH = os.path.join(os.path.dirname(__file__), "prompts_dataset.json")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "results/rq1_accuracy_results.txt")
 ALL_DIMS = ["goal", "audience", "format", "constraints", "context"]
@@ -25,16 +23,14 @@ def evaluate_rq1():
         prompt = item['instruction']
         expected = item['expected_dimensions']
         
-        # 1. Get True Labels
+        print(f"   > Processing: {prompt}")
         true_labels = [1 if expected.get(dim, False) else 0 for dim in ALL_DIMS]
         y_true.append(true_labels)
 
-        # 2. Get Predictions (Force lowercase match)
         missing_predicted = [m.lower().strip() for m in predict_missing_dimensions(prompt)]
         pred_labels = [1 if dim not in missing_predicted else 0 for dim in ALL_DIMS]
         y_pred.append(pred_labels)
 
-    # 3. Generate Report
     report = classification_report(
         y_true, y_pred, 
         target_names=ALL_DIMS, 

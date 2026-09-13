@@ -11,10 +11,7 @@ class LLMPolisher:
         self.ollama_url = ollama_url
     
     def polish(self, text: str) -> str:
-        """
-        Rewrite AI text to sound more human/conversational.
-        """
-        
+
         polish_prompt = f"""You are rewriting AI-generated text to sound more natural 
 and conversational, like a helpful human friend.
 
@@ -49,7 +46,6 @@ Rewrite this text to sound natural and conversational:"""
             result = response.json()
             polished = result.get("response", "").strip()
             
-            # Fallback to original if polish fails
             return polished if polished else text
             
         except Exception as e:

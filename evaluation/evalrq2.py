@@ -25,11 +25,9 @@ def evaluate_rq2():
         missing = json.loads(row['missing_dims'])
         answers = json.loads(row['answers'])
         
-        # Original dimensions = 5 total - missing count
         original_dims_count = 5 - len(missing)
         original_score = calculate_score(original_dims_count)
         
-        # Refined dimensions = Original + unique answers provided
         final_dims_count = original_dims_count + len(answers)
         final_score = calculate_score(final_dims_count)
         
