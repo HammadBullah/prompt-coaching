@@ -139,8 +139,6 @@ class ChatRequest(BaseModel):
     clarification_answers: Optional[Dict[str, str]] = None
 
 
-
-
 human_processor = LinguisticHumaniser()
 
  

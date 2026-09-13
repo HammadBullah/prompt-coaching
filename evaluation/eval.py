@@ -40,7 +40,7 @@ def evaluate_rq1():
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w") as f:
-        f.write("RQ1 - FINAL BALANCED PERFORMANCE REPORT\n" + "="*45 + "\n" + report)
+        f.write("RQ1\n" + "="*45 + "\n" + report)
 
     print("="*40 + "\nFINAL RQ1 RESULTS\n" + report + "\n" + "="*40)
 
