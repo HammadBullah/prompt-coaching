@@ -10,3 +10,5 @@ venv/
 
 # Job feed: raw batch drop-zone (processed batches are archived here)
 job-feed/inbox/
+# Job feed: local secrets (Adzuna API keys) — NEVER commit
+job-feed/config.local.json

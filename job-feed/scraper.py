@@ -39,9 +39,22 @@ CONFIG = os.path.join(ROOT, "config.json")
 def load_config():
     try:
         with open(CONFIG, "r", encoding="utf-8") as f:
-            return json.load(f)
+            cfg = json.load(f)
     except Exception:
-        return {}
+        cfg = {}
+    # Local overrides (gitignored) — this is where API keys live, never in git.
+    local = os.path.join(ROOT, "config.local.json")
+    try:
+        with open(local, "r", encoding="utf-8") as f:
+            lc = json.load(f)
+        for k, v in lc.items():
+            if isinstance(v, dict) and isinstance(cfg.get(k), dict):
+                cfg[k] = {**cfg[k], **v}
+            else:
+                cfg[k] = v
+    except Exception:
+        pass
+    return cfg
 
 
 CFG = load_config()
@@ -216,33 +229,35 @@ def src_adzuna():
     if not (app_id and app_key):
         return []
     out = []
-    what = urllib.parse.quote(az.get("what", "junior python"))
-    try:
-        url = (
-            "https://api.adzuna.com/v1/api/jobs/gb/search/1"
-            f"?app_id={app_id}&app_key={app_key}&results_per_page=50"
-            f"&what={what}&content-type=application/json"
-        )
-        data = json.loads(fetch(url))
-    except Exception as e:
-        print(f"  ! adzuna: {e}")
-        return out
-    for j in data.get("results", []):
-        sal = ""
-        if j.get("salary_min"):
-            sal = f"£{int(j['salary_min']):,}"
-            if j.get("salary_max") and j["salary_max"] != j["salary_min"]:
-                sal += f" – £{int(j['salary_max']):,}"
-        out.append({
-            "title": clean(j.get("title")),
-            "company": clean((j.get("company") or {}).get("display_name")),
-            "location": clean((j.get("location") or {}).get("display_name")),
-            "url": j.get("redirect_url") or "",
-            "source": "Adzuna",
-            "posted": (j.get("created") or "")[:10],
-            "salary": sal,
-            "tags": j.get("category", "").split("/")[::-1][:1],
-        })
+    queries = az.get("queries") or [az.get("what", "junior python")]
+    for what in queries:
+        try:
+            url = (
+                "https://api.adzuna.com/v1/api/jobs/gb/search/1"
+                f"?app_id={app_id}&app_key={app_key}&results_per_page=50"
+                f"&what={urllib.parse.quote(what)}&content-type=application/json"
+            )
+            data = json.loads(fetch(url))
+        except Exception as e:
+            print(f"  ! adzuna ({what}): {e}")
+            continue
+        for j in data.get("results", []):
+            sal = ""
+            if j.get("salary_min"):
+                sal = f"£{int(j['salary_min']):,}"
+                if j.get("salary_max") and j["salary_max"] != j["salary_min"]:
+                    sal += f" – £{int(j['salary_max']):,}"
+            out.append({
+                "title": clean(j.get("title")),
+                "company": clean((j.get("company") or {}).get("display_name")),
+                "location": clean((j.get("location") or {}).get("display_name")),
+                "url": j.get("redirect_url") or "",
+                "source": "Adzuna",
+                "posted": (j.get("created") or "")[:10],
+                "salary": sal,
+                "tags": j.get("category", "").split("/")[::-1][:1],
+            })
+        time.sleep(1)  # be polite between queries
     return out
 
 

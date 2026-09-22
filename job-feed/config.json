@@ -17,7 +17,7 @@
   "adzuna": {
     "app_id": "",
     "app_key": "",
-    "what": "junior python"
+    "queries": ["junior python developer", "graduate software engineer", "junior flutter developer", "graduate machine learning", "junior full stack developer"]
   },
   "http": {
     "user_agent": "Mozilla/5.0 (compatible; personal-job-feed/1.0)",

@@ -26,7 +26,8 @@ We Work Remotely RSS · **Adzuna** (optional free key — best UK coverage, see 
 1. Copy `job-feed/github-actions-workflow.yml` to `.github/workflows/job-feed-hourly.yml`
    (this sandbox's GitHub token can't push workflow files directly), then merge into `main`
    — scheduled workflows only run from the default branch.
-2. *(Optional)* Get a free API key at <https://developer.adzuna.com/>, then add repo
+2. *(Optional — you already have keys?)* Put your Adzuna credentials in
+   `job-feed/config.local.json` (gitignored — never commit keys), or for Actions add repo
    secrets `ADZUNA_APP_ID` and `ADZUNA_APP_KEY` (Settings → Secrets → Actions).
    This unlocks Adzuna — by far the richest UK board (Reed/Indeed-style listings).
 3. Done. Actions scrapes hourly and commits new jobs into `job-feed/data/` + `out/jobs_feed.md`.
