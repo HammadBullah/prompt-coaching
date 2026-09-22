@@ -1,5 +1,51 @@
 [
  {
+  "id": "2cc6f9c975dc",
+  "title": "Software Engineer II, Google Threat Intelligence (AI Agents / LLMs)",
+  "company": "Google",
+  "location": "Málaga, Spain (confirm in listing)",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/110207621671068358-software-engineer-ii-google-threat-intelligence",
+  "source": "Google Careers",
+  "posted": "2026-09-22",
+  "salary": "Google SWE II band",
+  "tags": [
+   "python",
+   "llm",
+   "ai agents",
+   "langchain",
+   "machine learning",
+   "security",
+   "big tech",
+   "visa sponsorship"
+  ],
+  "first_seen": "2026-09-22 10:37 UTC",
+  "score": 10,
+  "badge": "strong",
+  "direct": true
+ },
+ {
+  "id": "bad2d47aa57a",
+  "title": "Software Engineer II, Threat Intelligence (GTI)",
+  "company": "Google",
+  "location": "Málaga, Spain",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/133068619218068166-software-engineer-ii/",
+  "source": "Google Careers",
+  "posted": "2026-09-22",
+  "salary": "€56,000 - €57,500 + 15% bonus + equity",
+  "tags": [
+   "python",
+   "distributed systems",
+   "security",
+   "machine learning",
+   "big tech",
+   "visa sponsorship"
+  ],
+  "first_seen": "2026-09-22 10:37 UTC",
+  "score": 8,
+  "badge": "strong",
+  "direct": true
+ },
+ {
   "id": "561c894fec27",
   "title": "Graduate Python Engineer (Data/ML)",
   "company": "Oho Group Ltd",
