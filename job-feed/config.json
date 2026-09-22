@@ -1,0 +1,27 @@
+{
+  "profile": {
+    "note": "MSc Advanced Computer Science, UK Graduate visa (no sponsorship needed). Python / AI / Flutter / web.",
+    "location": "United Kingdom"
+  },
+  "scoring": {
+    "role_keywords": ["junior", "graduate", "grad", "entry level", "entry-level", "trainee", "intern", "associate"],
+    "tech_keywords": ["python", "django", "fastapi", "flask", "flutter", "dart", "machine learning", "ml engineer", "ai", "artificial intelligence", "llm", "genai", "nlp", "data", "react", "javascript", "typescript", "node", "full stack", "fullstack", "full-stack", "frontend", "front-end", "backend", "back-end", "web developer", "software engineer", "software developer", "devops", "qa", "test automation", "playwright", "selenium"],
+    "dealbreakers_drop": ["senior staff", "principal engineer", "director of", "head of", "lead engineer", "staff engineer", "8+ years", "10+ years"]
+  },
+  "search_urls": {
+    "linkedin_uk_junior_python": "https://uk.linkedin.com/jobs/junior-python-jobs",
+    "linkedin_uk_junior_developer": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+    "linkedin_uk_python": "https://uk.linkedin.com/jobs/python-developer-jobs",
+    "linkedin_uk_junior_django": "https://uk.linkedin.com/jobs/junior-django-developer-jobs"
+  },
+  "adzuna": {
+    "app_id": "",
+    "app_key": "",
+    "what": "junior python"
+  },
+  "http": {
+    "user_agent": "Mozilla/5.0 (compatible; personal-job-feed/1.0)",
+    "timeout_seconds": 30,
+    "interval_seconds": 3600
+  }
+}

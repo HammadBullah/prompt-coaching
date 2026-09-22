@@ -1,0 +1,33 @@
+name: Job feed hourly scrape
+
+on:
+  schedule:
+    - cron: "10 * * * *"   # hourly, at :10  (schedules only run on the default branch!)
+  workflow_dispatch: {}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Scrape job sources
+        run: python job-feed/scraper.py --once
+        env:
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+      - name: Commit updated feed
+        run: |
+          git config user.name "job-feed-bot"
+          git config user.email "job-feed-bot@users.noreply.github.com"
+          git add job-feed/data job-feed/out
+          if ! git diff --cached --quiet; then
+            git commit -m "job feed: hourly refresh $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          else
+            echo "No new jobs this hour."
+          fi

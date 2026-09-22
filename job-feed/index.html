@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Feed — UK Tech Jobs</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3;
+    --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --gold: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font: 15px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 24px; max-width: 1000px; margin: 0 auto; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  h1 { font-size: 22px; }
+  .meta { color: var(--muted); font-size: 13px; width: 100%; }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  input[type=search] { flex: 1 1 220px; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 8px; font-size: 14px; }
+  .chip { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 7px 12px; border-radius: 999px; cursor: pointer; font-size: 13px; user-select: none; }
+  .chip.active { background: var(--accent); border-color: var(--accent); color: #04121f; font-weight: 600; }
+  .count { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .card.strong { border-left: 4px solid var(--gold); }
+  .title-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .title-row a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 15.5px; }
+  .title-row a:hover { text-decoration: underline; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 700; letter-spacing: .3px; }
+  .badge.strong { background: rgba(210,153,34,.15); color: var(--gold); border: 1px solid var(--gold); }
+  .badge.good { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid var(--green); }
+  .sub { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+  .tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #21262d; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 2px 9px; font-size: 11.5px; }
+  .salary { color: var(--green); font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📬 Job Feed</h1>
+  <div class="meta" id="meta">loading…</div>
+</header>
+<div class="controls">
+  <input type="search" id="q" placeholder="Search title, company, location, tag… (e.g. python, remote, junior)">
+  <span class="chip active" data-f="all">All</span>
+  <span class="chip" data-f="strong">⭐ Strong match</span>
+  <span class="chip" data-f="uk">🇬🇧 UK</span>
+  <span class="chip" data-f="remote">🌍 Remote</span>
+  <span class="chip" data-f="junior">Junior/Grad</span>
+  <span class="chip" data-f="ai">AI / ML</span>
+  <span class="chip" data-f="python">Python</span>
+  <span class="chip" data-f="flutter">Flutter</span>
+</div>
+<div class="count" id="count"></div>
+<div id="list"></div>
+<script>
+let JOBS = [], FILTER = "all";
+const $ = s => document.querySelector(s);
+const esc = s => (s || "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function matches(j) {
+  const q = $("#q").value.trim().toLowerCase();
+  const hay = [j.title, j.company, j.location, j.source, (j.tags||[]).join(" ")].join(" ").toLowerCase();
+  if (q && !hay.includes(q)) return false;
+  if (FILTER === "strong") return j.badge === "strong" || j.badge === "good";
+  if (FILTER === "uk") return /uk|united kingdom|london|england|scotland|wales|britain|birmingham|manchester|bristol|leeds|cardiff|edinburgh/i.test(j.location);
+  if (FILTER === "remote") return /remote|worldwide|anywhere/i.test(j.location + " " + (j.tags||[]).join(" "));
+  if (FILTER === "junior") return /junior|graduate|grad|trainee|entry/i.test(j.title + " " + (j.tags||[]).join(" "));
+  if (FILTER === "ai") return /ai|ml|machine learning|data|llm|genai/i.test(j.title + " " + (j.tags||[]).join(" "));
+  if (FILTER === "python") return /python|django|fastapi|flask/i.test(j.title + " " + (j.tags||[]).join(" "));
+  if (FILTER === "flutter") return /flutter|dart|mobile/i.test(j.title + " " + (j.tags||[]).join(" "));
+  return true;
+}
+
+function render() {
+  const rows = JOBS.filter(matches);
+  $("#count").textContent = rows.length + " jobs shown";
+  $("#list").innerHTML = rows.map(j => `
+    <div class="card ${j.badge === "strong" ? "strong" : ""}">
+      <div class="title-row">
+        ${j.url ? `<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)}</a>` : `<span>${esc(j.title)}</span>`}
+        ${j.badge !== "other" ? `<span class="badge ${j.badge}">${j.badge === "strong" ? "⭐ STRONG MATCH" : "GOOD MATCH"}</span>` : ""}
+      </div>
+      <div class="sub">${esc(j.company)} · ${esc(j.location)}${j.posted ? " · posted " + esc(j.posted) : ""}${j.salary ? ` · <span class="salary">${esc(j.salary)}</span>` : ""} · <em>${esc(j.source)}</em>${j.first_seen ? ` · seen ${esc(j.first_seen)}` : ""}</div>
+      ${(j.tags && j.tags.length) ? `<div class="tags">${j.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+    </div>`).join("") || "<p style='color:var(--muted)'>No jobs match — try clearing the search or filters.</p>";
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/jobs");
+    const d = await r.json();
+    JOBS = d.jobs || [];
+    const m = d.meta || {};
+    $("#meta").textContent = `Last scrape: ${m.last_run || "—"} · ${m.total ?? JOBS.length} jobs total · +${m.new_last_run ?? 0} newest run · auto-refreshes every 3 min`;
+    render();
+  } catch (e) { $("#meta").textContent = "dashboard backend not reachable"; }
+}
+
+document.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+  document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+  c.classList.add("active"); FILTER = c.dataset.f; render();
+});
+$("#q").oninput = render;
+load();
+setInterval(load, 180000);
+</script>
+</body>
+</html>

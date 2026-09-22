@@ -7,3 +7,6 @@ __pycache__/
 venv/
 .env
 *.safetensors
+
+# Job feed: raw batch drop-zone (processed batches are archived here)
+job-feed/inbox/

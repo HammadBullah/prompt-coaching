@@ -1,0 +1,70 @@
+# 📬 Job Feed — UK tech jobs (junior / graduate / Python / AI / Flutter)
+
+Auto-updated. Newest batches at the top.
+
+## 🕐 2026-09-22 00:57 UTC — 64 new jobs (25 strong matches)
+
+- **[Graduate / Junior Developer, Python, JavaScript, PHP - London](https://uk.linkedin.com/jobs/junior-python-jobs)** — Noir · London, UK · 1 day ago — [LinkedIn UK] ⭐⭐
+- **[Graduate/Junior Fullstack Developer (Disruptive Startup)](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Ernest Gordon Recruitment · Southampton, UK · 5 days ago — [LinkedIn UK] ⭐⭐
+- **[Graduate/Junior Machine Learning Engineer](https://uk.linkedin.com/jobs/python-jobs)** — IT Graduate Recruitment · London, UK · 19 hours ago — [LinkedIn UK] ⭐⭐
+- **[Graduate/Junior Machine Learning Engineer](https://uk.linkedin.com/jobs/python-jobs)** — Erasmus International · City of London, UK · 2 days ago — [LinkedIn UK] ⭐⭐
+- **[Graduate / Junior Developer, Python, Linux, C#, Java - London](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Noir · London, UK · 4 days ago — [LinkedIn UK] ⭐⭐
+- **[Graduate/Junior Software Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Erasmus International · Scotland, UK · 3 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Junior Software Developer - Python - GenAI Start-Up](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Hammond Consulting · Southampton, UK · 1 month ago — [LinkedIn UK] ⭐⭐
+- **[Graduate/Junior Software Developer £50-60k + Bonus](https://uk.linkedin.com/jobs/python-jobs)** — IT Graduate Recruitment · London, UK · 19 hours ago · £50,000 - £60,000 + bonus — [LinkedIn UK] ⭐⭐
+- **[Graduate Software Engineer / Developer Python / C / C++ / Java](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Robustelli · Southampton, UK · 4 days ago — [LinkedIn UK] ⭐⭐
+- **[Fullstack Engineer - Mid Level - Actions Team](https://www.arbeitnow.com/jobs/fullstack-engineer-mid-level-actions-team-berlin-brandenburg-chemnitz-sachsen-dresden-sachsen-95298)** — Staffbase · Berlin, Germany (London office available) · recently — [Arbeitnow] ⭐⭐
+- **[Junior Back-end Software Engineer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Alma Economics · London, UK · 4 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Trainee Front-end Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Xigen · Bedford, UK · 6 days ago — [LinkedIn UK] ⭐⭐
+- **[Junior Full Stack Software Engineer (Typescript)](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Verisian · London, UK · 1 week ago — [LinkedIn UK] ⭐⭐
+- **[Junior Full Stack Developer - Python, React](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Infused Solutions · London, UK · 4 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Graduate Software Developer](https://uk.linkedin.com/jobs/python-jobs)** — TipTopJob · London, UK · 3 days ago — [LinkedIn UK] ⭐⭐
+- **[Graduate Software Developer](https://uk.linkedin.com/jobs/python-jobs)** — City Science · United Kingdom · 2 days ago — [LinkedIn UK] ⭐⭐
+- **[Graduate Software Engineer, Modelling](https://uk.linkedin.com/jobs/python-jobs)** — Runna · London, UK · 5 days ago — [LinkedIn UK] ⭐⭐
+- **[ML Engineer (AI training project)](https://www.python.org/jobs/8136/)** — Micro1 · Remote, Worldwide · recently — [Python.org Jobs] ⭐⭐
+- **[Junior- Mid-level Software Engineer (Python or Java)](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Better Placed Ltd · Manchester, UK · 2 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Remote Junior Django/React Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Pearson Carter · Gayton, UK (Remote) · 1 week ago · £30,000 — [LinkedIn UK] ⭐⭐
+- **[Junior Fullstack Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — In Technology Group · Sheffield, UK · 2 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Junior Full-stack Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Connexa IT Recruitment · Preston, UK · 6 days ago — [LinkedIn UK] ⭐⭐
+- **[Junior Full-Stack Developer (Remote, UK)](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Bookwhen Ltd · United Kingdom (Remote) · 3 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Junior Software Engineer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — PhysicsX · London, UK · 4 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Junior Data Scientist](https://uk.linkedin.com/jobs/junior-python-jobs)** — BIP UK/US · Greater London, UK · 3 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Full Stack Developer (React / Django)](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Intellect UK Group Limited · Little London, UK · 4 days ago — [LinkedIn UK] ⭐
+- **[Django Developer](https://www.python.org/jobs/8137/)** — The Developer Society · Birmingham, UK · recently — [Python.org Jobs] ⭐
+- **[Python Developer (Junior) - £60,000 base](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Orbis · Birmingham, UK · 10 hours ago · £60,000 base — [LinkedIn UK] ⭐
+- **[Junior Python Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — BES Group · Warrington, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior - mid Python Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Opus Recruitment Solutions · London, UK · 3 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Python Developer (Band 4/HEO)](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Health and Safety Executive · Buxton, UK · 6 days ago — [LinkedIn UK] ⭐
+- **[Junior Python Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Jobs via eFinancialCareers · London, UK · 1 day ago — [LinkedIn UK] ⭐
+- **[Junior Full Stack Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Nourish Care · Bournemouth, UK · 4 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Full Stack Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Mercury · Warwickshire, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior Odoo Python Developer](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — InterQuest Group · United Kingdom (Remote) · 3 days ago — [LinkedIn UK] ⭐
+- **[Junior / Mid Level Full Stack Engineer - Health Tech](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Oho Group Ltd · London, UK · 3 hours ago — [LinkedIn UK] ⭐
+- **[Junior Python Developer – Elite Fintech Firm (up to £80K + Bonus + Hybrid)](https://uk.linkedin.com/jobs/python-developer-jobs)** — Hunter Bond · London, UK · 1 week ago · up to £80,000 + bonus — [LinkedIn UK] ⭐
+- **[Junior Python developer - Up to £100,000 + Bonus](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Hunter Bond · Greater London, UK · 1 week ago · up to £100,000 + bonus — [LinkedIn UK] ⭐
+- **[Junior Software Developer, PHP, HTML, CSS](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Beautyk Creative · Oxford, UK · 2 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Software Developer SQL, HTML, CSS](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Connexa IT Recruitment · Blackpool, UK · 3 days ago — [LinkedIn UK] ⭐
+- **[Junior Web Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Newsquest Media Group · Wideopen, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior Software Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Allegiance Technology · London, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior Web Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Oliver Bernard · London, UK · 3 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Software Engineer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Klickstarters · Birmingham, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior Software Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Pepper Mill · London, UK · 3 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Web Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — Premier Group Recruitment · Reading, UK · 5 days ago — [LinkedIn UK] ⭐
+- **[Junior Full Stack Engineer](https://uk.linkedin.com/jobs/python-jobs)** — DrDoctor · London, UK · 1 day ago · £39,000 - £54,000 — [LinkedIn UK] ⭐
+- **[Junior Python Developer](https://uk.linkedin.com/jobs/python-jobs)** — Austin Fraser · Reading, UK · 3 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Data Analyst](https://uk.linkedin.com/jobs/junior-python-jobs)** — Intellect Group · London, UK · 1 day ago — [LinkedIn UK] ⭐
+- **[Junior Data Engineer](https://uk.linkedin.com/jobs/junior-python-jobs)** — LDMS · Cardiff, Wales, UK · 5 days ago — [LinkedIn UK] ⭐
+- **[Junior Software Engineer](https://uk.linkedin.com/jobs/junior-python-jobs)** — Zonal · Bristol, UK · 3 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Software Developer](https://uk.linkedin.com/jobs/junior-python-jobs)** — Oscar Technology · Leicester, UK · 1 day ago — [LinkedIn UK] ⭐
+- **[Junior Full Stack Engineer (DrDoctor)](https://uk.linkedin.com/jobs/junior-software-engineer-jobs-london)** — DrDoctor · London, UK · 5 days ago · £39,000 - £54,000 — [LinkedIn UK] ⭐
+- **[Python Software Engineer - No financial experience required](https://uk.linkedin.com/jobs/junior-django-developer-jobs)** — Saragossa · London, UK · 2 weeks ago — [LinkedIn UK] ⭐
+- **[Python Developer](https://uk.linkedin.com/jobs/python-developer-jobs)** — Satalia · United Kingdom · 1 week ago — [LinkedIn UK] ⭐
+- **[Python Developer](https://uk.linkedin.com/jobs/python-jobs)** — MindPal · Birmingham, UK · 6 days ago — [LinkedIn UK] ⭐
+- **[Software Engineer (Python)](https://uk.linkedin.com/jobs/python-jobs)** — Aegiq · Sheffield, UK · 2 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Developer](https://uk.linkedin.com/jobs/junior-developer-jobs)** — This is Beyond Ltd · Hammersmith, London, UK · 3 weeks ago — [LinkedIn UK]
+- **[Python Developer](https://uk.linkedin.com/jobs/python-developer-jobs)** — Amicus · England, UK · 4 days ago — [LinkedIn UK]
+- **[Python Developer](https://uk.linkedin.com/jobs/python-developer-jobs)** — Creditsafe · Cardiff, Wales, UK · 5 days ago — [LinkedIn UK]
+- **[Python Developer](https://uk.linkedin.com/jobs/python-developer-jobs)** — hubbado · London, UK · 22 hours ago — [LinkedIn UK]
+- **[Python Developer](https://uk.linkedin.com/jobs/python-developer-jobs)** — Cambrian Robotics · London, UK · 3 weeks ago — [LinkedIn UK]
+- **[Python Developer](https://uk.linkedin.com/jobs/python-jobs)** — hireful · Leeds, UK · 1 hour ago — [LinkedIn UK]
+- **[Marketing Data Science Manager](https://jobicy.com/jobs/153828-marketing-data-science-manager)** — Mozilla · Remote (Canada, UK) · recently — [Jobicy]
