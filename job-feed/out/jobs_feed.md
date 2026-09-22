@@ -2,6 +2,26 @@
 
 Auto-updated. Newest batches at the top.
 
+## 🕐 2026-09-22 01:21 UTC — 17 new jobs (5 strong matches)
+
+- **[Graduate Python Engineer (Data/ML)](https://www.google.com/search?q=%22Graduate%20Python%20Engineer%20%28Data/ML%29%22%20%22Oho%20Group%20Ltd%22%20job)** — Oho Group Ltd · London, UK · 3 days ago — [LinkedIn UK] ⭐⭐
+- **[Junior Data Scientist - Large Language Model prompt refinement](https://www.google.com/search?q=%22Junior%20Data%20Scientist%20-%20Large%20Language%20Model%20prompt%20refinement%22%20%22TWYN%22%20job)** — TWYN · London, UK · 1 month ago — [LinkedIn UK] ⭐⭐
+- **[Machine Learning (NLP) Software Engineer](https://www.google.com/search?q=%22Machine%20Learning%20%28NLP%29%20Software%20Engineer%22%20%22Veer%22%20job)** — Veer · Greater London, UK · 14 hours ago — [LinkedIn UK] ⭐⭐
+- **[Graduate Data Scientist](https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london)** — GRAYCE · Cambridge, UK · 6 hours ago — [LinkedIn UK] ⭐⭐
+- **[Graduate Data Scientist: Hybrid UK](https://www.google.com/search?q=%22Graduate%20Data%20Scientist%3A%20Hybrid%20UK%22%20%22Shift%20Technology%22%20job)** — Shift Technology · London, UK · 2 weeks ago — [LinkedIn UK] ⭐⭐
+- **[Junior Data Scientist](https://www.google.com/search?q=%22Junior%20Data%20Scientist%22%20%22DCMQ%22%20job)** — DCMQ · London, UK · 17 hours ago — [LinkedIn UK] ⭐
+- **[Junior AI Engineer (Labour Transformation)](https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs)** — Stint · Camden Town, London, UK · 1 month ago · £35,000 - £40,000 — [LinkedIn UK] ⭐
+- **[Junior Data Scientist](https://www.google.com/search?q=%22Junior%20Data%20Scientist%22%20%22Reply%22%20job)** — Reply · Greater London, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Junior Machine Learning Engineer](https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london)** — Kindred Group plc · London, UK · 1 month ago — [LinkedIn UK] ⭐
+- **[Junior Software Engineer](https://www.google.com/search?q=%22Junior%20Software%20Engineer%22%20%22Red%20Bull%20Racing%20%26%20Red%20Bull%20Technology%22%20job)** — Red Bull Racing & Red Bull Technology · Milton Keynes, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Data Scientist (Junior) - Leading Hedge Fund](https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london)** — Resources Group · London, UK · 1 week ago — [LinkedIn UK] ⭐
+- **[Machine Learning Research Engineer Intern](https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london)** — SPAICE · London, UK · 2 weeks ago — [LinkedIn UK] ⭐
+- **[Junior Data Analyst](https://www.google.com/search?q=%22Junior%20Data%20Analyst%22%20%22The%20Opportunity%20Hub%20UK%22%20job)** — The Opportunity Hub UK · Newham, London, UK · 1 day ago — [LinkedIn UK] ⭐
+- **[Machine Learning Engineer](https://uk.linkedin.com/jobs/machine-learning-jobs-london)** — Quantcast · London, UK · 1 hour ago — [LinkedIn UK] ⭐
+- **[Machine Learning Engineer (Biometrics) - Remote](https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs)** — RDX Works Ltd · United Kingdom (Remote) · 1 day ago — [LinkedIn UK]
+- **[AI Engineer](https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs)** — Lawhive · United Kingdom · 1 week ago — [LinkedIn UK]
+- **[Machine Learning Engineer - Telematics](https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london)** — Zego · London, UK · 2 weeks ago — [LinkedIn UK]
+
 ## 🕐 2026-09-22 00:57 UTC — 64 new jobs (25 strong matches)
 
 - **[Graduate / Junior Developer, Python, JavaScript, PHP - London](https://uk.linkedin.com/jobs/junior-python-jobs)** — Noir · London, UK · 1 day ago — [LinkedIn UK] ⭐⭐

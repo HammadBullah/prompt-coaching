@@ -18,6 +18,7 @@ import json
 import os
 import re
 import shutil
+import urllib.parse
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -98,10 +99,61 @@ def badge(score):
     return "other"
 
 
+# URLs that are *search/listing* pages, not actual job postings.
+AGGREGATE_MARKERS = (
+    "linkedin.com/jobs/junior-",
+    "linkedin.com/jobs/python",
+    "linkedin.com/jobs/graduate",
+    "linkedin.com/jobs/search",
+    "linkedin.com/jobs/software",
+    "linkedin.com/jobs/flutter",
+)
+
+
+def is_direct(url):
+    """True if the URL points at an actual job posting."""
+    u = (url or "").lower()
+    if not u:
+        return False
+    return not any(m in u for m in AGGREGATE_MARKERS)
+
+
+def search_url_for(title, company):
+    """Best-effort link that lands on the real posting: an exact-phrase Google search."""
+    q = urllib.parse.quote(f'"{title}" "{company}" job')
+    return f"https://www.google.com/search?q={q}"
+
+
+def fix_links(job):
+    """Ensure every job has a usable link; mark whether it's a direct posting."""
+    url = job.get("url") or ""
+    if is_direct(url):
+        job["direct"] = True
+    else:
+        job["direct"] = False
+        job["url"] = search_url_for(job.get("title", ""), job.get("company", ""))
+    return job
+
+
+def migrate_existing(jobs):
+    """Backfill direct/search links for jobs stored before this logic existed."""
+    changed = False
+    for j in jobs:
+        if "direct" not in j or (not j.get("direct") and "google.com/search" not in (j.get("url") or "")):
+            before = j.get("url")
+            fix_links(j)
+            if j.get("url") != before:
+                changed = True
+    return changed
+
+
 def process():
     ensure_dirs()
     cfg = load_json(CONFIG_PATH, {})
     jobs = load_json(JOBS_JSON, [])
+    if migrate_existing(jobs):
+        save_json(JOBS_JSON, jobs)
+        print("Migrated stored jobs: non-direct links replaced with exact-phrase search links.")
     seen = set(load_json(SEEN_JSON, []))
     now = datetime.now(timezone.utc)
     ts = now.strftime("%Y-%m-%d %H:%M UTC")
@@ -113,7 +165,6 @@ def process():
     )
     skipped_dupes = 0
     skipped_senior = 0
-
     for fname in batch_files:
         path = os.path.join(INBOX, fname)
         batch = load_json(path, [])
@@ -145,6 +196,7 @@ def process():
             }
             job["score"] = score_job(job, cfg)
             job["badge"] = badge(job["score"])
+            fix_links(job)
             new_jobs.append(job)
         shutil.move(path, os.path.join(PROCESSED, fname))
 

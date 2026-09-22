@@ -27,6 +27,8 @@
   .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 700; letter-spacing: .3px; }
   .badge.strong { background: rgba(210,153,34,.15); color: var(--gold); border: 1px solid var(--gold); }
   .badge.good { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid var(--green); }
+  .badge.direct { background: rgba(88,166,255,.12); color: var(--accent); border: 1px solid var(--accent); }
+  .badge.find { background: #21262d; color: var(--muted); border: 1px solid var(--border); }
   .sub { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
   .tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
   .tag { background: #21262d; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 2px 9px; font-size: 11.5px; }
@@ -78,6 +80,7 @@ function render() {
       <div class="title-row">
         ${j.url ? `<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)}</a>` : `<span>${esc(j.title)}</span>`}
         ${j.badge !== "other" ? `<span class="badge ${j.badge}">${j.badge === "strong" ? "⭐ STRONG MATCH" : "GOOD MATCH"}</span>` : ""}
+        ${j.direct ? `<span class="badge direct" title="Opens the actual job posting">↗ direct link</span>` : `<span class="badge find" title="Opens an exact-phrase search that lands on the real posting">🔎 find posting</span>`}
       </div>
       <div class="sub">${esc(j.company)} · ${esc(j.location)}${j.posted ? " · posted " + esc(j.posted) : ""}${j.salary ? ` · <span class="salary">${esc(j.salary)}</span>` : ""} · <em>${esc(j.source)}</em>${j.first_seen ? ` · seen ${esc(j.first_seen)}` : ""}</div>
       ${(j.tags && j.tags.length) ? `<div class="tags">${j.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}

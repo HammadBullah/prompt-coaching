@@ -1,10 +1,321 @@
 [
  {
+  "id": "561c894fec27",
+  "title": "Graduate Python Engineer (Data/ML)",
+  "company": "Oho Group Ltd",
+  "location": "London, UK",
+  "url": "https://www.google.com/search?q=%22Graduate%20Python%20Engineer%20%28Data/ML%29%22%20%22Oho%20Group%20Ltd%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "3 days ago",
+  "salary": "",
+  "tags": [
+   "python",
+   "machine learning",
+   "data",
+   "graduate"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 12,
+  "badge": "strong",
+  "direct": false
+ },
+ {
+  "id": "9a3000748ec7",
+  "title": "Junior Data Scientist - Large Language Model prompt refinement",
+  "company": "TWYN",
+  "location": "London, UK",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Scientist%20-%20Large%20Language%20Model%20prompt%20refinement%22%20%22TWYN%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "1 month ago",
+  "salary": "",
+  "tags": [
+   "llm",
+   "data science",
+   "ai",
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 9,
+  "badge": "strong",
+  "direct": false
+ },
+ {
+  "id": "59c444effd9d",
+  "title": "Machine Learning (NLP) Software Engineer",
+  "company": "Veer",
+  "location": "Greater London, UK",
+  "url": "https://www.google.com/search?q=%22Machine%20Learning%20%28NLP%29%20Software%20Engineer%22%20%22Veer%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "14 hours ago",
+  "salary": "",
+  "tags": [
+   "nlp",
+   "machine learning",
+   "ai"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 8,
+  "badge": "strong",
+  "direct": false
+ },
+ {
+  "id": "17f906ef67e8",
+  "title": "Graduate Data Scientist",
+  "company": "GRAYCE",
+  "location": "Cambridge, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "6 hours ago",
+  "salary": "",
+  "tags": [
+   "data science",
+   "graduate"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 8,
+  "badge": "strong",
+  "direct": true
+ },
+ {
+  "id": "8a0576a95764",
+  "title": "Graduate Data Scientist: Hybrid UK",
+  "company": "Shift Technology",
+  "location": "London, UK",
+  "url": "https://www.google.com/search?q=%22Graduate%20Data%20Scientist%3A%20Hybrid%20UK%22%20%22Shift%20Technology%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "2 weeks ago",
+  "salary": "",
+  "tags": [
+   "data science",
+   "graduate"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 8,
+  "badge": "strong",
+  "direct": false
+ },
+ {
+  "id": "5abbd96d5646",
+  "title": "Junior Data Scientist",
+  "company": "DCMQ",
+  "location": "London, UK",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Scientist%22%20%22DCMQ%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "17 hours ago",
+  "salary": "",
+  "tags": [
+   "data science",
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": false
+ },
+ {
+  "id": "ff22b8ea8675",
+  "title": "Junior AI Engineer (Labour Transformation)",
+  "company": "Stint",
+  "location": "Camden Town, London, UK",
+  "url": "https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs",
+  "source": "LinkedIn UK",
+  "posted": "1 month ago",
+  "salary": "£35,000 - £40,000",
+  "tags": [
+   "ai",
+   "junior",
+   "startup"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": true
+ },
+ {
+  "id": "a72bcc810090",
+  "title": "Junior Data Scientist",
+  "company": "Reply",
+  "location": "Greater London, UK",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Scientist%22%20%22Reply%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "1 week ago",
+  "salary": "",
+  "tags": [
+   "data science",
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": false
+ },
+ {
+  "id": "c8340026aa97",
+  "title": "Junior Machine Learning Engineer",
+  "company": "Kindred Group plc",
+  "location": "London, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "1 month ago",
+  "salary": "",
+  "tags": [
+   "machine learning",
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": true
+ },
+ {
+  "id": "4be724136793",
+  "title": "Junior Software Engineer",
+  "company": "Red Bull Racing & Red Bull Technology",
+  "location": "Milton Keynes, UK",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Engineer%22%20%22Red%20Bull%20Racing%20%26%20Red%20Bull%20Technology%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "1 week ago",
+  "salary": "",
+  "tags": [
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": false
+ },
+ {
+  "id": "dbe7e6ee0b0e",
+  "title": "Data Scientist (Junior) - Leading Hedge Fund",
+  "company": "Resources Group",
+  "location": "London, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "1 week ago",
+  "salary": "",
+  "tags": [
+   "data science",
+   "junior",
+   "fintech"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": true
+ },
+ {
+  "id": "d135737ea211",
+  "title": "Machine Learning Research Engineer Intern",
+  "company": "SPAICE",
+  "location": "London, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "2 weeks ago",
+  "salary": "",
+  "tags": [
+   "machine learning",
+   "intern"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": true
+ },
+ {
+  "id": "4e0148a0e2c4",
+  "title": "Junior Data Analyst",
+  "company": "The Opportunity Hub UK",
+  "location": "Newham, London, UK",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Analyst%22%20%22The%20Opportunity%20Hub%20UK%22%20job",
+  "source": "LinkedIn UK",
+  "posted": "1 day ago",
+  "salary": "",
+  "tags": [
+   "data",
+   "junior"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 5,
+  "badge": "good",
+  "direct": false
+ },
+ {
+  "id": "450ed566376c",
+  "title": "Machine Learning Engineer",
+  "company": "Quantcast",
+  "location": "London, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "1 hour ago",
+  "salary": "",
+  "tags": [
+   "machine learning",
+   "ai"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 4,
+  "badge": "good",
+  "direct": true
+ },
+ {
+  "id": "202ee17d1f6e",
+  "title": "Machine Learning Engineer (Biometrics) - Remote",
+  "company": "RDX Works Ltd",
+  "location": "United Kingdom (Remote)",
+  "url": "https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs",
+  "source": "LinkedIn UK",
+  "posted": "1 day ago",
+  "salary": "",
+  "tags": [
+   "machine learning",
+   "remote"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 2,
+  "badge": "other",
+  "direct": true
+ },
+ {
+  "id": "144006a72686",
+  "title": "AI Engineer",
+  "company": "Lawhive",
+  "location": "United Kingdom",
+  "url": "https://uk.linkedin.com/jobs/artificial-intelligence-engineer-jobs",
+  "source": "LinkedIn UK",
+  "posted": "1 week ago",
+  "salary": "",
+  "tags": [
+   "ai",
+   "startup"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 2,
+  "badge": "other",
+  "direct": true
+ },
+ {
+  "id": "0c73b3376a9a",
+  "title": "Machine Learning Engineer - Telematics",
+  "company": "Zego",
+  "location": "London, UK",
+  "url": "https://uk.linkedin.com/jobs/machine-learning-engineer-jobs-london",
+  "source": "LinkedIn UK",
+  "posted": "2 weeks ago",
+  "salary": "",
+  "tags": [
+   "machine learning"
+  ],
+  "first_seen": "2026-09-22 01:21 UTC",
+  "score": 2,
+  "badge": "other",
+  "direct": true
+ },
+ {
   "id": "356b55f142a3",
   "title": "Graduate / Junior Developer, Python, JavaScript, PHP - London",
   "company": "Noir",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20/%20Junior%20Developer%2C%20Python%2C%20JavaScript%2C%20PHP%20-%20London%22%20%22Noir%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 day ago",
   "salary": "",
@@ -16,14 +327,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 13,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "0269953a2b3d",
   "title": "Graduate/Junior Fullstack Developer (Disruptive Startup)",
   "company": "Ernest Gordon Recruitment",
   "location": "Southampton, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate/Junior%20Fullstack%20Developer%20%28Disruptive%20Startup%29%22%20%22Ernest%20Gordon%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "",
@@ -34,14 +346,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 13,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "c234b3d86908",
   "title": "Graduate/Junior Machine Learning Engineer",
   "company": "IT Graduate Recruitment",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate/Junior%20Machine%20Learning%20Engineer%22%20%22IT%20Graduate%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "19 hours ago",
   "salary": "",
@@ -53,14 +366,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 13,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "dcc7ee8b3c33",
   "title": "Graduate/Junior Machine Learning Engineer",
   "company": "Erasmus International",
   "location": "City of London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate/Junior%20Machine%20Learning%20Engineer%22%20%22Erasmus%20International%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 days ago",
   "salary": "",
@@ -72,14 +386,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 13,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "431ed5548137",
   "title": "Graduate / Junior Developer, Python, Linux, C#, Java - London",
   "company": "Noir",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20/%20Junior%20Developer%2C%20Python%2C%20Linux%2C%20C%23%2C%20Java%20-%20London%22%20%22Noir%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 days ago",
   "salary": "",
@@ -90,14 +405,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 11,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "0cc3567c256e",
   "title": "Graduate/Junior Software Developer",
   "company": "Erasmus International",
   "location": "Scotland, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate/Junior%20Software%20Developer%22%20%22Erasmus%20International%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -107,14 +423,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 11,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "57c24e2e9b03",
   "title": "Junior Software Developer - Python - GenAI Start-Up",
   "company": "Hammond Consulting",
   "location": "Southampton, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%20-%20Python%20-%20GenAI%20Start-Up%22%20%22Hammond%20Consulting%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 month ago",
   "salary": "",
@@ -126,14 +443,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 11,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "af995f2fe7db",
   "title": "Graduate/Junior Software Developer £50-60k + Bonus",
   "company": "IT Graduate Recruitment",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate/Junior%20Software%20Developer%20%C2%A350-60k%20%2B%20Bonus%22%20%22IT%20Graduate%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "19 hours ago",
   "salary": "£50,000 - £60,000 + bonus",
@@ -143,14 +461,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 11,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "0637a6ea187a",
   "title": "Graduate Software Engineer / Developer Python / C / C++ / Java",
   "company": "Robustelli",
   "location": "Southampton, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20Software%20Engineer%20/%20Developer%20Python%20/%20C%20/%20C%2B%2B%20/%20Java%22%20%22Robustelli%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 days ago",
   "salary": "",
@@ -162,7 +481,8 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 10,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "9d3fcca7697b",
@@ -182,14 +502,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 10,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": true
  },
  {
   "id": "42743fad6b99",
   "title": "Junior Back-end Software Engineer",
   "company": "Alma Economics",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Back-end%20Software%20Engineer%22%20%22Alma%20Economics%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 weeks ago",
   "salary": "",
@@ -199,14 +520,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 9,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "b81a0363d699",
   "title": "Trainee Front-end Developer",
   "company": "Xigen",
   "location": "Bedford, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Trainee%20Front-end%20Developer%22%20%22Xigen%22%20job",
   "source": "LinkedIn UK",
   "posted": "6 days ago",
   "salary": "",
@@ -216,14 +538,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 9,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "25f4b90f7eca",
   "title": "Junior Full Stack Software Engineer (Typescript)",
   "company": "Verisian",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Software%20Engineer%20%28Typescript%29%22%20%22Verisian%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -234,14 +557,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 9,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "194d8fd54aff",
   "title": "Junior Full Stack Developer - Python, React",
   "company": "Infused Solutions",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Developer%20-%20Python%2C%20React%22%20%22Infused%20Solutions%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 weeks ago",
   "salary": "",
@@ -253,14 +577,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 9,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "18f84127fda1",
   "title": "Graduate Software Developer",
   "company": "TipTopJob",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20Software%20Developer%22%20%22TipTopJob%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 days ago",
   "salary": "",
@@ -269,14 +594,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 8,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "ecdf1c114381",
   "title": "Graduate Software Developer",
   "company": "City Science",
   "location": "United Kingdom",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20Software%20Developer%22%20%22City%20Science%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 days ago",
   "salary": "",
@@ -285,14 +611,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 8,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "b42f523fcee0",
   "title": "Graduate Software Engineer, Modelling",
   "company": "Runna",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Graduate%20Software%20Engineer%2C%20Modelling%22%20%22Runna%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "",
@@ -302,7 +629,8 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 8,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "2b10655d4ee5",
@@ -321,14 +649,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 8,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": true
  },
  {
   "id": "fca8f4598a7c",
   "title": "Junior- Mid-level Software Engineer (Python or Java)",
   "company": "Better Placed Ltd",
   "location": "Manchester, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior-%20Mid-level%20Software%20Engineer%20%28Python%20or%20Java%29%22%20%22Better%20Placed%20Ltd%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 weeks ago",
   "salary": "",
@@ -338,14 +667,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "db0eaee26890",
   "title": "Remote Junior Django/React Developer",
   "company": "Pearson Carter",
   "location": "Gayton, UK (Remote)",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Remote%20Junior%20Django/React%20Developer%22%20%22Pearson%20Carter%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "£30,000",
@@ -357,14 +687,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "0a748e0f8565",
   "title": "Junior Fullstack Developer",
   "company": "In Technology Group",
   "location": "Sheffield, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Fullstack%20Developer%22%20%22In%20Technology%20Group%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 weeks ago",
   "salary": "",
@@ -374,14 +705,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "0d7153ad0807",
   "title": "Junior Full-stack Developer",
   "company": "Connexa IT Recruitment",
   "location": "Preston, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full-stack%20Developer%22%20%22Connexa%20IT%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "6 days ago",
   "salary": "",
@@ -391,14 +723,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "e9b740cdd3b7",
   "title": "Junior Full-Stack Developer (Remote, UK)",
   "company": "Bookwhen Ltd",
   "location": "United Kingdom (Remote)",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full-Stack%20Developer%20%28Remote%2C%20UK%29%22%20%22Bookwhen%20Ltd%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -410,14 +743,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "8c79b3574c21",
   "title": "Junior Software Engineer",
   "company": "PhysicsX",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Engineer%22%20%22PhysicsX%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 weeks ago",
   "salary": "",
@@ -429,14 +763,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "734f4a2004e8",
   "title": "Junior Data Scientist",
   "company": "BIP UK/US",
   "location": "Greater London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Scientist%22%20%22BIP%20UK/US%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -447,14 +782,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 7,
-  "badge": "strong"
+  "badge": "strong",
+  "direct": false
  },
  {
   "id": "ac38ab7d72b2",
   "title": "Full Stack Developer (React / Django)",
   "company": "Intellect UK Group Limited",
   "location": "Little London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Full%20Stack%20Developer%20%28React%20/%20Django%29%22%20%22Intellect%20UK%20Group%20Limited%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 days ago",
   "salary": "",
@@ -465,7 +801,8 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 6,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "3c23af64577c",
@@ -484,14 +821,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 6,
-  "badge": "good"
+  "badge": "good",
+  "direct": true
  },
  {
   "id": "609940a85ed0",
   "title": "Python Developer (Junior) - £60,000 base",
   "company": "Orbis",
   "location": "Birmingham, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%20%28Junior%29%20-%20%C2%A360%2C000%20base%22%20%22Orbis%22%20job",
   "source": "LinkedIn UK",
   "posted": "10 hours ago",
   "salary": "£60,000 base",
@@ -501,14 +839,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "da92c7f8a771",
   "title": "Junior Python Developer",
   "company": "BES Group",
   "location": "Warrington, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20Developer%22%20%22BES%20Group%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -518,14 +857,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "2c6fd08862b2",
   "title": "Junior - mid Python Developer",
   "company": "Opus Recruitment Solutions",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20-%20mid%20Python%20Developer%22%20%22Opus%20Recruitment%20Solutions%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -534,14 +874,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "d66a0165a207",
   "title": "Junior Python Developer (Band 4/HEO)",
   "company": "Health and Safety Executive",
   "location": "Buxton, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20Developer%20%28Band%204/HEO%29%22%20%22Health%20and%20Safety%20Executive%22%20job",
   "source": "LinkedIn UK",
   "posted": "6 days ago",
   "salary": "",
@@ -552,14 +893,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "d6179ac6b1fe",
   "title": "Junior Python Developer",
   "company": "Jobs via eFinancialCareers",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20Developer%22%20%22Jobs%20via%20eFinancialCareers%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 day ago",
   "salary": "",
@@ -570,14 +912,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "fe6dafe412c0",
   "title": "Junior Full Stack Developer",
   "company": "Nourish Care",
   "location": "Bournemouth, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Developer%22%20%22Nourish%20Care%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 weeks ago",
   "salary": "",
@@ -587,14 +930,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "3fff6d975a44",
   "title": "Junior Full Stack Developer",
   "company": "Mercury",
   "location": "Warwickshire, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Developer%22%20%22Mercury%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -604,14 +948,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "4625ae587426",
   "title": "Junior Odoo Python Developer",
   "company": "InterQuest Group",
   "location": "United Kingdom (Remote)",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Odoo%20Python%20Developer%22%20%22InterQuest%20Group%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 days ago",
   "salary": "",
@@ -622,14 +967,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "4bf56d960781",
   "title": "Junior / Mid Level Full Stack Engineer - Health Tech",
   "company": "Oho Group Ltd",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20/%20Mid%20Level%20Full%20Stack%20Engineer%20-%20Health%20Tech%22%20%22Oho%20Group%20Ltd%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 hours ago",
   "salary": "",
@@ -640,14 +986,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "10d4daaba054",
   "title": "Junior Python Developer – Elite Fintech Firm (up to £80K + Bonus + Hybrid)",
   "company": "Hunter Bond",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20Developer%20%E2%80%93%20Elite%20Fintech%20Firm%20%28up%20to%20%C2%A380K%20%2B%20Bonus%20%2B%20Hybrid%29%22%20%22Hunter%20Bond%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "up to £80,000 + bonus",
@@ -658,14 +1005,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "e40ac73704fa",
   "title": "Junior Python developer - Up to £100,000 + Bonus",
   "company": "Hunter Bond",
   "location": "Greater London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20developer%20-%20Up%20to%20%C2%A3100%2C000%20%2B%20Bonus%22%20%22Hunter%20Bond%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "up to £100,000 + bonus",
@@ -675,14 +1023,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "61dc9a3d6827",
   "title": "Junior Software Developer, PHP, HTML, CSS",
   "company": "Beautyk Creative",
   "location": "Oxford, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%2C%20PHP%2C%20HTML%2C%20CSS%22%20%22Beautyk%20Creative%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 weeks ago",
   "salary": "",
@@ -693,14 +1042,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "77bba88b3b27",
   "title": "Junior Software Developer SQL, HTML, CSS",
   "company": "Connexa IT Recruitment",
   "location": "Blackpool, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%20SQL%2C%20HTML%2C%20CSS%22%20%22Connexa%20IT%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 days ago",
   "salary": "",
@@ -711,14 +1061,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "b15c94ea131a",
   "title": "Junior Web Developer",
   "company": "Newsquest Media Group",
   "location": "Wideopen, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Web%20Developer%22%20%22Newsquest%20Media%20Group%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -728,14 +1079,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "053c4b0989d1",
   "title": "Junior Software Developer",
   "company": "Allegiance Technology",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%22%20%22Allegiance%20Technology%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -744,14 +1096,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "fdc1550cc5d2",
   "title": "Junior Web Developer",
   "company": "Oliver Bernard",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Web%20Developer%22%20%22Oliver%20Bernard%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -761,14 +1114,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "e87452470bfb",
   "title": "Junior Software Engineer",
   "company": "Klickstarters",
   "location": "Birmingham, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Engineer%22%20%22Klickstarters%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -777,14 +1131,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "cd7690e8920e",
   "title": "Junior Software Developer",
   "company": "Pepper Mill",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%22%20%22Pepper%20Mill%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -793,14 +1148,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "f9d1978ae61b",
   "title": "Junior Web Developer",
   "company": "Premier Group Recruitment",
   "location": "Reading, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Web%20Developer%22%20%22Premier%20Group%20Recruitment%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "",
@@ -810,14 +1166,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "46f3e37121b6",
   "title": "Junior Full Stack Engineer",
   "company": "DrDoctor",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Engineer%22%20%22DrDoctor%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 day ago",
   "salary": "£39,000 - £54,000",
@@ -827,14 +1184,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "c7a6a2de7ab5",
   "title": "Junior Python Developer",
   "company": "Austin Fraser",
   "location": "Reading, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Python%20Developer%22%20%22Austin%20Fraser%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -844,14 +1202,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "d9c3c8607f81",
   "title": "Junior Data Analyst",
   "company": "Intellect Group",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Analyst%22%20%22Intellect%20Group%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 day ago",
   "salary": "",
@@ -861,14 +1220,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "613c9be05454",
   "title": "Junior Data Engineer",
   "company": "LDMS",
   "location": "Cardiff, Wales, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Data%20Engineer%22%20%22LDMS%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "",
@@ -878,14 +1238,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "f52c5f0e14fa",
   "title": "Junior Software Engineer",
   "company": "Zonal",
   "location": "Bristol, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Engineer%22%20%22Zonal%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -894,14 +1255,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "8becb1b14301",
   "title": "Junior Software Developer",
   "company": "Oscar Technology",
   "location": "Leicester, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-python-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Software%20Developer%22%20%22Oscar%20Technology%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 day ago",
   "salary": "",
@@ -910,14 +1272,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "badb41c3d099",
   "title": "Junior Full Stack Engineer (DrDoctor)",
   "company": "DrDoctor",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-software-engineer-jobs-london",
+  "url": "https://www.google.com/search?q=%22Junior%20Full%20Stack%20Engineer%20%28DrDoctor%29%22%20%22DrDoctor%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "£39,000 - £54,000",
@@ -927,14 +1290,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 5,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "04ee01410fd2",
   "title": "Python Software Engineer - No financial experience required",
   "company": "Saragossa",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-django-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Software%20Engineer%20-%20No%20financial%20experience%20required%22%20%22Saragossa%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 weeks ago",
   "salary": "",
@@ -944,14 +1308,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 4,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "58b77463574b",
   "title": "Python Developer",
   "company": "Satalia",
   "location": "United Kingdom",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22Satalia%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 week ago",
   "salary": "",
@@ -961,14 +1326,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 4,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "5696016ebf19",
   "title": "Python Developer",
   "company": "MindPal",
   "location": "Birmingham, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22MindPal%22%20job",
   "source": "LinkedIn UK",
   "posted": "6 days ago",
   "salary": "",
@@ -978,14 +1344,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 4,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "38f5d75c17e7",
   "title": "Software Engineer (Python)",
   "company": "Aegiq",
   "location": "Sheffield, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Software%20Engineer%20%28Python%29%22%20%22Aegiq%22%20job",
   "source": "LinkedIn UK",
   "posted": "2 weeks ago",
   "salary": "",
@@ -994,14 +1361,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 4,
-  "badge": "good"
+  "badge": "good",
+  "direct": false
  },
  {
   "id": "6af59cd88507",
   "title": "Junior Developer",
   "company": "This is Beyond Ltd",
   "location": "Hammersmith, London, UK",
-  "url": "https://uk.linkedin.com/jobs/junior-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Junior%20Developer%22%20%22This%20is%20Beyond%20Ltd%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -1011,14 +1379,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 3,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "a855485b9034",
   "title": "Python Developer",
   "company": "Amicus",
   "location": "England, UK",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22Amicus%22%20job",
   "source": "LinkedIn UK",
   "posted": "4 days ago",
   "salary": "",
@@ -1027,14 +1396,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "020d87a3e0f7",
   "title": "Python Developer",
   "company": "Creditsafe",
   "location": "Cardiff, Wales, UK",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22Creditsafe%22%20job",
   "source": "LinkedIn UK",
   "posted": "5 days ago",
   "salary": "",
@@ -1043,14 +1413,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "aa90c2ceec2a",
   "title": "Python Developer",
   "company": "hubbado",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22hubbado%22%20job",
   "source": "LinkedIn UK",
   "posted": "22 hours ago",
   "salary": "",
@@ -1059,14 +1430,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "3c3795631955",
   "title": "Python Developer",
   "company": "Cambrian Robotics",
   "location": "London, UK",
-  "url": "https://uk.linkedin.com/jobs/python-developer-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22Cambrian%20Robotics%22%20job",
   "source": "LinkedIn UK",
   "posted": "3 weeks ago",
   "salary": "",
@@ -1076,14 +1448,15 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "79d811880d2a",
   "title": "Python Developer",
   "company": "hireful",
   "location": "Leeds, UK",
-  "url": "https://uk.linkedin.com/jobs/python-jobs",
+  "url": "https://www.google.com/search?q=%22Python%20Developer%22%20%22hireful%22%20job",
   "source": "LinkedIn UK",
   "posted": "1 hour ago",
   "salary": "",
@@ -1092,7 +1465,8 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": false
  },
  {
   "id": "29554407afdf",
@@ -1110,6 +1484,7 @@
   ],
   "first_seen": "2026-09-22 00:57 UTC",
   "score": 2,
-  "badge": "other"
+  "badge": "other",
+  "direct": true
  }
 ]
