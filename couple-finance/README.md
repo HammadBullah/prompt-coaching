@@ -9,14 +9,36 @@ Everything runs on your own computer. **No accounts, no cloud, no dependencies**
 cd couple-finance
 python3 run.py            # then open http://127.0.0.1:8765
 ```
+…or double-click `start.command` (macOS) / `start.bat` (Windows). On a phone, open the address and use
+“Add to Home Screen” – it installs like an app.
 
 Options (environment variables): `PORT=8765`, `HOST=127.0.0.1` (use `HOST=0.0.0.0` so your partner can open it from
-her phone on the same Wi-Fi – there is no login, so only do that on a network you trust),
+her phone on the same Wi-Fi), `CF_PASSWORD=...` (asks for a password – **set this whenever HOST is not 127.0.0.1**),
 `COUPLE_FINANCE_DB=/path/to/finance.db` (default `couple-finance/data/finance.db`, git-ignored).
 
 Run the tests: `python3 -m unittest discover -s tests`
 
-## How it avoids manual typing
+## Getting transactions in without typing (all free)
+
+**1. Automatic bank sync – Auto-sync tab.** Uses [Enable Banking](https://enablebanking.com)'s free *Restricted
+Production* mode (EU/UK, official PSD2 APIs, 2,500+ banks incl. the big Dutch ones). It is free for accounts you link
+yourselves – exactly this use case – but it is *not* a public service: each of you links your own bank login to your own
+application. One-time setup of ~15 minutes (the tab walks you through it), then the app pulls new transactions every
+few hours (banks allow ~4 pulls/day), categorises them and skips anything you already typed or imported.
+Banks require you to renew the consent every 90–180 days; the app shows a countdown and a *Reconnect* button.
+GoCardless Bank Account Data (ex-Nordigen), the old free option, no longer accepts new sign-ups.
+
+**2. Phone payment webhook.** `POST /api/ingest` with `{token, amount, merchant, person}` creates an entry instantly.
+With an iPhone Shortcut automation on *Wallet → Transaction* every Apple Pay / card payment is booked the moment you pay.
+Needs no bank API at all. Token and copy-paste instructions are on the Auto-sync tab.
+
+**3. Quick-add bar / CSV import** as fallbacks (below).
+
+> Privacy: the private key stays in `data/enablebanking.pem` (permissions 600, git-ignored); bank data goes
+> bank → Enable Banking → your computer. Nothing is stored anywhere else. Bank sync needs `openssl` on the PATH
+> (present on macOS/Linux and Git-for-Windows) or `pip install cryptography`.
+
+## Other automation
 
 | Feature | What it does |
 |---|---|
@@ -49,6 +71,7 @@ couple-finance/
   couplefinance/
     db.py                     schema + seed categories/rules
     parsing.py                numbers, dates, bank CSV, rule matching, quick-add parser
+    bank.py                   Enable Banking client (JWT), connect flow, background sync, webhook helpers
     service.py                recurring, summary, settlement, goals, detection, import
     server.py                 stdlib HTTP server + JSON API (/api/...)
     demo.py                   demo data + sample bank export
@@ -58,6 +81,4 @@ couple-finance/
 
 ## Ideas for later
 
-* Live bank sync through an open-banking provider (e.g. GoCardless Bank Account Data, Enable Banking) – needs API keys
-  and a consent flow; the import pipeline (`classify_import_rows` → `commit_import`) can be reused as-is.
 * Receipt photo → transaction, PDF statement import, monthly e-mail summary, sinking funds for yearly bills.

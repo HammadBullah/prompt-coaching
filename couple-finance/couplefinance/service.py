@@ -554,12 +554,28 @@ def _find_recurring_match(conn, row_date, ttype, amount_cents, claimed):
     return None
 
 
-def classify_import_rows(conn, parsed_rows, person_id):
-    """Adds hash, suggested category/type and status (new / duplicate / matches_bill) to parsed bank rows."""
+def _find_manual_twin(conn, row_date, ttype, amount_cents, claimed):
+    """An entry that was typed in / imported from CSV earlier: same amount, +-1 day, not from bank sync."""
+    d = date.fromisoformat(row_date)
+    lo, hi = (d - timedelta(days=1)).isoformat(), (d + timedelta(days=1)).isoformat()
+    for t in conn.execute(
+            "SELECT id FROM transactions WHERE recurring_id IS NULL AND type = ? AND amount_cents = ? "
+            "AND date BETWEEN ? AND ? AND (import_hash IS NULL OR import_hash NOT LIKE 'eb:%')", (ttype, amount_cents, lo, hi)):
+        if t["id"] not in claimed:
+            return t["id"]
+    return None
+
+
+def classify_import_rows(conn, parsed_rows, person_id, fuzzy=False, scope=None):
+    """Adds hash, suggested category/type and status (new / duplicate / matches_bill) to parsed bank rows.
+
+    fuzzy=True (bank sync) also treats a same-amount entry from +-1 day that you typed in or imported from CSV
+    as already present, so mixing quick-add / CSV / automatic sync never double counts."""
     from .parsing import row_hashes
     m = matcher(conn)
     cats = {c["id"]: c for c in rows(conn, "SELECT * FROM categories")}
-    hashes = row_hashes(parsed_rows, scope=str(person_id))
+    hashes = row_hashes(parsed_rows, scope=scope or str(person_id))
+    hashes = [r.get("hash") or h for r, h in zip(parsed_rows, hashes)]
     known = {r[0] for r in conn.execute("SELECT import_hash FROM transactions WHERE import_hash IS NOT NULL")}
     claimed, out = set(), []
     for r, h in zip(parsed_rows, hashes):
@@ -575,6 +591,9 @@ def classify_import_rows(conn, parsed_rows, person_id):
         item = {**r, "hash": h, "type": ttype, "category_id": cid, "amount_cents": abs(signed),
                 "signed_cents": signed, "status": "new", "recurring_match_id": None}
         if h in known:
+            item["status"] = "duplicate"
+        elif fuzzy and (twin := _find_manual_twin(conn, r["date"], ttype, abs(signed), claimed)):
+            claimed.add(twin)
             item["status"] = "duplicate"
         elif ttype != "transfer":
             mid = _find_recurring_match(conn, r["date"], ttype, abs(signed), claimed)

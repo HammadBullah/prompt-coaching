@@ -119,7 +119,7 @@ function trendChart(data) {
 }
 
 // ------------------------------------------------------------------ shell
-const PAGES = [["overview", "Overview"], ["transactions", "Transactions"], ["bills", "Bills & income"], ["goals", "Goals"], ["import", "Import"], ["settings", "Settings"]];
+const PAGES = [["overview", "Overview"], ["transactions", "Transactions"], ["bills", "Bills & income"], ["goals", "Goals"], ["bank", "Auto-sync"], ["import", "Import"], ["settings", "Settings"]];
 
 function renderShell() {
   $("#nav").innerHTML = PAGES.map(([id, label]) => `<a href="#${id}" class="${S.page === id ? "active" : ""}">${label}</a>`).join("");
@@ -231,7 +231,7 @@ function welcome(v) {
     <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
     <h3>Then pick a starting point</h3>
     <div class="grid g3" style="margin-top:10px">
-      <a class="card" href="#import" style="text-decoration:none"><div style="font-size:1.6rem">🏦</div><b>Import bank CSV</b><div class="small muted">Best option: hundreds of transactions in seconds, auto-categorised.</div></a>
+      <a class="card" href="#bank" style="text-decoration:none"><div style="font-size:1.6rem">🏦</div><b>Connect your bank (free)</b><div class="small muted">Transactions arrive by themselves. Or import a CSV export instead.</div></a>
       <a class="card" href="#bills" style="text-decoration:none"><div style="font-size:1.6rem">🔁</div><b>Add salaries & rent</b><div class="small muted">Set once, then it books itself every month.</div></a>
       <a class="card" href="#" id="demo" style="text-decoration:none"><div style="font-size:1.6rem">🧪</div><b>Explore with demo data</b><div class="small muted">See every feature filled in. Can be wiped anytime.</div></a></div></div>`;
   $("#wform").onsubmit = async (e) => {
@@ -419,11 +419,96 @@ async function historyModal(g) {
   const form = $("#modal-host form"); const cl = document.createElement("div"); cl.className = "actions"; cl.innerHTML = `<button type="button" class="btn" data-close>Close</button>`; form.appendChild(cl); cl.firstChild.onclick = closeModal;
 }
 
+// ------------------------------------------------------------------ AUTO-SYNC (free bank connection + phone webhook)
+async function viewBank(v) {
+  const st = await api("GET", "/bank/status");
+  const cfg = st.config, ready = cfg.app_id && cfg.has_key;
+  const token = S.boot.settings.ingest_token || "";
+  const hook = `${location.origin}/api/ingest`;
+  const defaultRedirect = S.boot.settings.eb_redirect_url || (location.protocol === "https:" ? location.origin + "/callback" : `https://localhost:${location.port || 8765}/callback`);
+  const ago = (iso) => { if (!iso) return "never"; const m = Math.round((Date.now() - new Date(iso)) / 60000); return m < 1 ? "just now" : m < 60 ? m + " min ago" : m < 1440 ? Math.round(m / 60) + " h ago" : Math.round(m / 1440) + " days ago"; };
+  const connHtml = st.connections.map((c) => {
+    const exp = c.status === "expired" || (c.days_left != null && c.days_left < 0);
+    const soon = !exp && c.days_left != null && c.days_left <= 7;
+    return `<div class="row" style="align-items:flex-start"><div class="ico">🏦</div><div class="grow"><div class="title">${esc(c.aspsp_name)} <span class="muted small">· ${esc(personName(c.person_id))}</span></div>
+      ${c.accounts.map((a) => `<div class="small muted">${esc(a.name)} •••• ${esc(a.iban_tail)} · last synced ${a.last_sync ? fmtDateLong(a.last_sync) : "never"}${a.last_error ? ` · <span class="bad">${esc(a.last_error)}</span>` : ""}</div>`).join("")}</div>
+      <div class="right">${exp ? `<span class="badge bad">Consent expired</span>` : soon ? `<span class="badge warn">Renew in ${c.days_left} days</span>` : `<span class="badge good">Connected${c.days_left != null ? " · " + c.days_left + " days left" : ""}</span>`}
+      <div style="margin-top:6px;display:flex;gap:6px;justify-content:flex-end"><button class="btn sm" data-sync="${c.id}" ${exp ? "disabled" : ""}>Sync</button><button class="btn sm danger" data-disc="${c.id}">Remove</button></div></div></div>`;
+  }).join("");
+
+  v.innerHTML = `<div class="page-head"><div><h2>Auto-sync</h2><div class="muted small">Get transactions without touching a CSV — free.</div></div>
+    ${st.connections.length ? `<button class="btn primary" id="sync-all">↻ Sync now</button>` : ""}</div>
+    <div class="stack">
+    <div class="card"><h3>Two free ways</h3><div class="grid g2" style="margin-top:10px">
+      <div><b>1 · Bank connection</b> <span class="badge good">fully automatic</span><p class="small muted" style="margin:6px 0 0">Uses <b>Enable Banking</b>'s free “Restricted Production” mode (EU, PSD2): real data from accounts <i>you link yourselves</i>. Every purchase, salary and bill is pulled in every few hours, categorised and de-duplicated. Needs a one-time setup (~15 min) and a renewal every 90–180 days (bank rule).</p></div>
+      <div><b>2 · Phone payment webhook</b> <span class="badge info">instant</span><p class="small muted" style="margin:6px 0 0">An iPhone Shortcut (or Android Tasker) sends each card/Apple Pay payment to this app the moment you pay. No third party, no bank login. Only covers payments made with your phone.</p></div></div>
+      <p class="small muted" style="margin-bottom:0">Both can run together — entries are matched, never counted twice. (GoCardless / Nordigen used to be the free choice but no longer accepts new sign-ups.)</p></div>
+
+    ${st.connections.length ? `<div class="card"><div class="card-head"><h3>Connected accounts</h3><span class="small muted">Last sync: ${ago(st.last_sync)} · automatic every ${cfg.sync_hours} h while the app is running</span></div>${connHtml}</div>` : ""}
+
+    <div class="card"><div class="card-head"><h3>${ready ? "✅ Step 1 · Enable Banking is set up" : "Step 1 · One-time setup"}</h3>${ready ? `<button class="btn sm" id="edit-cfg">Change</button>` : ""}</div>
+      <div id="cfg-wrap" style="${ready ? "display:none" : ""}">
+      <ol class="small" style="line-height:1.75;padding-left:20px;margin-top:0">
+        <li>Open <a href="https://enablebanking.com/sign-in/" target="_blank" rel="noopener">enablebanking.com</a>, sign in with your email (no password, no card), go to <b>API applications → Add</b>.</li>
+        <li>Choose <b>Production</b>, keep <i>“Generate in the browser and export private key”</i> (a <code>.pem</code> file downloads — keep it safe), any name, and as <b>Redirect URL</b> use exactly: <code>${esc(defaultRedirect)}</code>. For description / privacy / terms / e-mail fill anything (an https link like <code>https://localhost:8765</code> is fine for restricted use).</li>
+        <li>Click <b>Activate by linking accounts</b> and log in to your bank once. <b>Your partner does the same with her bank login</b> so her account is allowed too. (This only whitelists the accounts.)</li>
+        <li>Paste the <b>Application ID</b> and the contents of the <code>.pem</code> file below.</li></ol>
+      <form id="cfg-form"><div class="fields2"><div class="field"><label>Application ID</label><input type="text" name="app_id" value="${esc(cfg.app_id)}" placeholder="cf589be3-3755-…" required></div>
+        <div class="field"><label>Redirect URL (must match Enable Banking)</label><input type="text" name="redirect_url" value="${esc(defaultRedirect)}"></div></div>
+        <div class="field"><label>Private key (.pem) ${cfg.has_key ? "— already saved, leave empty to keep" : ""}</label><input type="file" id="pem-file" accept=".pem,.key,.txt"><textarea name="private_key" rows="3" placeholder="-----BEGIN PRIVATE KEY-----" style="margin-top:6px"></textarea></div>
+        <div class="field"><label>Auto-sync every (hours, min 4)</label><input type="number" name="sync_hours" min="4" max="48" value="${cfg.sync_hours}" style="width:120px"></div>
+        <button class="btn primary">Save</button></form></div></div>
+
+    ${ready ? `<div class="card"><h3>Step 2 · Connect a bank account</h3>
+      <div class="grid g3" style="margin:10px 0"><div class="field"><label>Whose account?</label><select id="b-person">${personOptions(S.me, true)}</select></div>
+        <div class="field"><label>Country</label><select id="b-country">${["NL", "BE", "DE", "FR", "GB", "ES", "IT", "IE", "PT", "AT", "FI", "SE", "DK", "NO", "PL"].map((c) => opt(c, c, "NL")).join("")}</select></div>
+        <div class="field"><label>Bank</label><select id="b-bank"><option>Loading banks…</option></select></div></div>
+      <button class="btn primary" id="b-connect" disabled>Connect →</button>
+      <div id="b-paste" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+        <p class="small" style="margin-top:0"><b>Approve in your bank's app/site.</b> Afterwards your browser lands on a page that may show an error or “can't connect” — that's expected. <b>Copy the full address from the address bar</b> (it contains <code>?code=…</code>) and paste it here:</p>
+        <div style="display:flex;gap:8px"><input type="text" id="b-redirect" placeholder="https://localhost:8765/callback?code=…&state=…"><button class="btn primary" id="b-finish">Finish</button></div>
+        <p class="small muted"><a id="b-open" href="#" target="_blank" rel="noopener">Bank page didn't open? Click here.</a></p></div></div>` : ""}
+
+    <div class="card"><h3>📱 Phone payment webhook</h3>
+      <p class="small muted" style="margin-top:6px">Each payment you make with your iPhone creates an entry immediately. On iPhone: <b>Shortcuts → Automation → New → Transaction</b> (Wallet) → choose your cards → <b>Get contents of URL</b> with method <b>POST</b>, request body <b>JSON</b>:</p>
+      <pre style="background:var(--bg);padding:12px;border-radius:10px;overflow:auto;font-size:.82rem">URL:  ${esc(hook)}
+{ "token": "${esc(token)}",
+  "amount":   (Shortcut input → Amount),
+  "merchant": (Shortcut input → Merchant),
+  "person":   "${esc(personName(S.me))}" }</pre>
+      <p class="small muted">Android: use the same URL from Tasker / MacroDroid / HTTP Shortcuts. Test from a terminal:</p>
+      <pre style="background:var(--bg);padding:12px;border-radius:10px;overflow:auto;font-size:.82rem">curl -X POST ${esc(hook)} -H 'Content-Type: application/json' \\
+  -d '{"token":"${esc(token)}","amount":"4,50","merchant":"Coffee","person":"${esc(personName(S.me))}"}'</pre>
+      <p class="small muted" style="margin-bottom:0">Your phone must be able to reach this app: same Wi-Fi with <code>HOST=0.0.0.0</code> and a <code>CF_PASSWORD</code> set, or a free private tunnel such as Tailscale. Keep the token secret.</p></div></div>`;
+
+  const doSync = async (body, btn) => { if (btn) { btn.disabled = true; btn.textContent = "Syncing…"; } try { const r = await api("POST", "/bank/sync", body); const errs = r.results.filter((x) => x.error); toast(errs.length ? errs[0].error : `Synced — ${r.added} new transaction(s)${r.suggestions ? ", new recurring items found" : ""}`, { error: !!errs.length }); S.boot = await api("GET", "/bootstrap"); } finally { refresh(); } };
+  const sa = $("#sync-all"); if (sa) sa.onclick = () => doSync({}, sa);
+  v.querySelectorAll("[data-sync]").forEach((b) => (b.onclick = () => doSync({}, b)));
+  v.querySelectorAll("[data-disc]").forEach((b) => (b.onclick = async () => { if (!confirm("Remove this bank connection? Transactions already imported are kept.")) return; await api("DELETE", `/bank/connections/${b.dataset.disc}`); refresh(); }));
+  const ec = $("#edit-cfg"); if (ec) ec.onclick = () => { $("#cfg-wrap").style.display = ""; ec.remove(); };
+  const pf = $("#pem-file"); if (pf) pf.onchange = () => { const r = new FileReader(); r.onload = () => { $("#cfg-form").private_key.value = r.result; }; r.readAsText(pf.files[0]); };
+  $("#cfg-form").onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.target).entries());
+    await api("PUT", "/bank/config", { app_id: f.app_id, redirect_url: f.redirect_url, private_key: f.private_key || null, sync_hours: f.sync_hours }); toast("Saved"); refresh(); };
+
+  if (ready) {
+    const bankSel = $("#b-bank"), btn = $("#b-connect"); let banks = [];
+    const loadBanks = async () => { bankSel.innerHTML = "<option>Loading banks…</option>"; btn.disabled = true;
+      try { banks = await api("GET", `/bank/banks?country=${$("#b-country").value}`); bankSel.innerHTML = banks.map((b, i) => opt(i, b.name, "")).join(""); btn.disabled = !banks.length; } catch (e) { bankSel.innerHTML = "<option>Could not load banks</option>"; } };
+    $("#b-country").onchange = loadBanks; loadBanks();
+    btn.onclick = async () => { const b = banks[Number(bankSel.value)]; if (!b) return; btn.disabled = true;
+      try { const pid = $("#b-person").value; const r = await api("POST", "/bank/connect", { person_id: pid === "" ? null : Number(pid), bank: b.name, country: b.country, max_days: b.max_days });
+        $("#b-paste").style.display = ""; $("#b-open").href = r.url; window.open(r.url, "_blank", "noopener"); } finally { btn.disabled = false; } };
+    $("#b-finish").onclick = async (e) => { const val = $("#b-redirect").value.trim(); if (!val) return toast("Paste the address first", { error: true }); e.target.disabled = true; e.target.textContent = "Connecting…";
+      try { const r = await api("POST", "/bank/finish", { redirect: val }); const added = (r.sync || []).reduce((a, x) => a + (x.added || 0), 0); const err = (r.sync || []).find((x) => x.error);
+        toast(err ? "Connected, but the first sync failed: " + err.error : `Connected! Imported ${added} transactions.`, { error: !!err }); S.boot = await api("GET", "/bootstrap"); refresh(); } catch (err) { e.target.disabled = false; e.target.textContent = "Finish"; } };
+  }
+}
+
 // ------------------------------------------------------------------ IMPORT
 async function viewImport(v) {
   const st = S.importState;
   if (st && st.preview) return importPreview(v);
-  v.innerHTML = `<div class="page-head"><div><h2>Import from your bank</h2><div class="muted small">The quickest way to fill the app. Download a CSV export from your banking app/website (ING, ABN AMRO, Rabobank, bunq, Revolut, Wise and most others work) and drop it here.</div></div></div>
+  v.innerHTML = `<div class="page-head"><div><h2>Import from your bank</h2><div class="muted small">Prefer no files at all? Use <a href="#bank">Auto-sync</a> (free). Otherwise: download a CSV export from your banking app/website (ING, ABN AMRO, Rabobank, bunq, Revolut, Wise and most others work) and drop it here.</div></div></div>
     <div class="grid g-main"><div class="card stack">
       <div class="field"><label>Whose account is this?</label><select id="imp-person">${personOptions(S.me, true)}</select></div>
       <div class="drop" id="drop"><div style="font-size:2rem">📥</div><b>Drop CSV file here</b><div class="small">or click to choose a file</div><input type="file" id="file" accept=".csv,.txt,text/csv" hidden></div>
@@ -509,7 +594,7 @@ async function viewSettings(v) {
   $("#wipe").onclick = async () => { if (prompt("This deletes every transaction, bill and goal. Type DELETE to confirm.") !== "DELETE") return; await api("POST", "/reset", { confirm: "DELETE" }); S.boot = await api("GET", "/bootstrap"); toast("All cleared"); location.hash = "#overview"; route(); };
 }
 
-const VIEWS = { overview: viewOverview, transactions: viewTransactions, bills: viewBills, goals: viewGoals, import: viewImport, settings: viewSettings };
+const VIEWS = { overview: viewOverview, transactions: viewTransactions, bills: viewBills, goals: viewGoals, bank: viewBank, import: viewImport, settings: viewSettings };
 
 // ------------------------------------------------------------------ quick add
 let qTimer;

@@ -1,16 +1,20 @@
 """Tiny dependency-free HTTP server: JSON API under /api plus the static front-end."""
+import base64
+import hmac
 import json
 import mimetypes
 import os
 import re
 import sys
+import threading
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
-from . import db, parsing, service
+from . import bank, db, parsing, service
 from .demo import load_demo, sample_csv_text
 
+mimetypes.add_type("application/manifest+json", ".webmanifest")
 STATIC_DIR = os.path.join(db.BASE_DIR, "static")
 SPLITS = ("equal", "income", "p1", "p2")
 FREQS = ("weekly", "biweekly", "monthly", "quarterly", "yearly")
@@ -451,6 +455,85 @@ def h_demo(conn, p, q, b):
     return {"ok": True}
 
 
+
+# bank sync ----------------------------------------------------------------
+
+def bank_call(fn, *a, **kw):
+    try:
+        return fn(*a, **kw)
+    except bank.BankError as e:
+        raise ApiError(str(e), e.status if e.status in (400, 404, 409, 429) else 502 if e.status >= 500 else 400)
+
+
+def h_bank_status(conn, p, q, b):
+    return bank.status(conn)
+
+
+def h_bank_config(conn, p, q, b):
+    bank_call(bank.save_config, conn, b.get("app_id"), b.get("private_key"), b.get("redirect_url"), b.get("sync_hours"))
+    return bank.status(conn)
+
+
+def h_bank_banks(conn, p, q, b):
+    return bank_call(bank.list_banks, conn, q.get("country", "NL"))
+
+
+def h_bank_connect(conn, p, q, b):
+    pid = opt_int(b.get("person_id"))
+    if pid not in (None, 1, 2):
+        raise ApiError("Invalid person")
+    return bank_call(bank.begin_connect, conn, pid, need(b, "bank", str), need(b, "country", str), b.get("max_days"))
+
+
+def h_bank_finish(conn, p, q, b):
+    cid = bank_call(bank.finish_connect, conn, need(b, "redirect", str))
+    try:
+        result = bank.sync_all(conn, full=True, only_conn=cid)
+    except bank.BankError as e:
+        result = [{"error": str(e)}]
+    return {"connection_id": cid, "sync": result}
+
+
+def h_bank_sync(conn, p, q, b):
+    results = bank_call(bank.sync_all, conn, bool(b.get("full")))
+    return {"results": results, "added": sum(r.get("added", 0) for r in results),
+            "suggestions": len(service.detect_recurring(conn))}
+
+
+def h_bank_disconnect(conn, p, q, b):
+    bank.disconnect(conn, int(p["id"]))
+    return {"ok": True}
+
+
+def h_ingest(conn, p, q, b):
+    """Webhook for iPhone Shortcuts / Android automations: one payment in, token-protected."""
+    data = {**q, **b}
+    token = db.get_settings(conn).get("ingest_token", "")
+    if not token or not hmac.compare_digest(str(data.get("token", "")), token):
+        raise ApiError("Invalid token", 403)
+    people_list = db.rows(conn, "SELECT id, name FROM people")
+    pid = opt_int(data.get("person_id")) if data.get("person_id") not in (None, "") else None
+    who = str(data.get("person", "")).strip().lower()
+    if pid is None and who:
+        pid = next((x["id"] for x in people_list if x["name"].lower() == who), None)
+    if data.get("text"):
+        draft = parsing.parse_quick(str(data["text"]), people_list, db.rows(conn, "SELECT id, name, kind FROM categories"),
+                                    service.matcher(conn), default_person=pid)
+        if not draft["ok"]:
+            raise ApiError(draft["error"])
+        draft.pop("ok")
+    else:
+        amount = parsing.parse_amount(data.get("amount"))
+        if amount is None:
+            raise ApiError("Missing or invalid amount")
+        draft = {"date": parsing.parse_date(data.get("date")) or date.today().isoformat(),
+                 "type": "income" if str(data.get("type", "")).lower() == "income" else "expense",
+                 "amount_cents": abs(parsing.to_cents(amount)), "description": str(data.get("merchant") or data.get("description") or "Payment")[:200],
+                 "person_id": pid}
+    tx = h_tx_create(conn, {}, {}, draft)
+    return {"ok": True, "transaction": {k: tx[k] for k in ("id", "date", "amount_cents", "description", "category_name")}}
+
+
 def h_sample(conn, p, q, b):
     return {"text": sample_csv_text()}
 
@@ -498,6 +581,15 @@ ROUTES = [
     ("GET", r"/api/export", h_export),
     ("POST", r"/api/demo", h_demo),
     ("GET", r"/api/sample-csv", h_sample),
+    ("GET", r"/api/bank/status", h_bank_status),
+    ("PUT", r"/api/bank/config", h_bank_config),
+    ("GET", r"/api/bank/banks", h_bank_banks),
+    ("POST", r"/api/bank/connect", h_bank_connect),
+    ("POST", r"/api/bank/finish", h_bank_finish),
+    ("POST", r"/api/bank/sync", h_bank_sync),
+    ("DELETE", r"/api/bank/connections/(?P<id>\d+)", h_bank_disconnect),
+    ("GET", r"/api/ingest", h_ingest),
+    ("POST", r"/api/ingest", h_ingest),
     ("POST", r"/api/reset", h_reset),
 ]
 COMPILED = [(m, re.compile("^" + pat + "$"), fn) for m, pat, fn in ROUTES]
@@ -521,8 +613,45 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def _authorised(self, url):
+        pw = os.environ.get("CF_PASSWORD")
+        if not pw or url.path == "/api/ingest":        # the webhook has its own token
+            return True
+        header = self.headers.get("Authorization", "")
+        if header.startswith("Basic "):
+            try:
+                _, _, given = base64.b64decode(header[6:]).decode().partition(":")
+                if hmac.compare_digest(given, pw):
+                    return True
+            except Exception:
+                pass
+        self._send(401, {"error": "Password required"}, extra={"WWW-Authenticate": 'Basic realm="Couple Finance"'})
+        return False
+
+    def _callback(self, url):
+        """Bank redirect target when the app itself is reachable over https."""
+        conn = db.connect()
+        try:
+            bank.finish_connect(conn, "?" + url.query)
+            msg, target = "Bank connected! Redirecting…", "/#bank"
+            try:
+                bank.sync_all(conn, full=True)
+            except bank.BankError:
+                pass
+        except bank.BankError as e:
+            msg, target = f"Could not connect: {e}", "/#bank"
+        finally:
+            conn.close()
+        page = (f'<meta charset="utf-8"><meta http-equiv="refresh" content="3;url={target}">'
+                f'<body style="font:16px system-ui;padding:40px"><p>{msg}</p><p><a href="{target}">Back to the app</a></p>')
+        self._send(200, page.encode(), "text/html; charset=utf-8")
+
     def _dispatch(self, method):
         url = urlparse(self.path)
+        if not self._authorised(url):
+            return
+        if url.path == "/callback" and method == "GET":
+            return self._callback(url)
         if url.path.startswith("/api/"):
             return self._api(method, url)
         if method != "GET":
@@ -563,6 +692,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(e.status, {"error": str(e)})
             except (ValueError, KeyError, TypeError) as e:
                 return self._send(400, {"error": f"Bad request: {e}"})
+            except Exception as e:                      # never drop the connection without an answer
+                sys.stderr.write(f"Unexpected error on {method} {url.path}: {e!r}\n")
+                return self._send(500, {"error": "Something went wrong on the server. Check the terminal for details."})
             finally:
                 conn.close()
         self._send(405 if path_matched else 404, {"error": "Not found"})
@@ -582,10 +714,16 @@ def main():
     conn.close()
     httpd = ThreadingHTTPServer((host, port), Handler)
     print(f"Couple Finance running on http://{host}:{port}  (data: {db.DB_PATH})")
+    if host not in ("127.0.0.1", "localhost") and not os.environ.get("CF_PASSWORD"):
+        print("WARNING: listening on the network without a password. Set CF_PASSWORD=... to protect your data.")
+    stop = threading.Event()
+    threading.Thread(target=bank.background_loop, args=(stop,), daemon=True).start()
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\nBye!")
+    finally:
+        stop.set()
 
 
 if __name__ == "__main__":

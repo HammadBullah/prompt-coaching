@@ -1,5 +1,6 @@
 """SQLite schema, connection helper and seed data."""
 import os
+import secrets
 import sqlite3
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,6 +77,24 @@ CREATE TABLE IF NOT EXISTS goal_contributions (
     amount_cents INTEGER NOT NULL,           -- negative = withdrawal
     person_id INTEGER,
     note TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS bank_auth (
+    state TEXT PRIMARY KEY, person_id INTEGER, aspsp_name TEXT NOT NULL, aspsp_country TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bank_connections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, person_id INTEGER, aspsp_name TEXT NOT NULL, aspsp_country TEXT NOT NULL,
+    session_id TEXT NOT NULL, valid_until TEXT, status TEXT NOT NULL DEFAULT 'active',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bank_accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    connection_id INTEGER NOT NULL REFERENCES bank_connections(id) ON DELETE CASCADE,
+    uid TEXT NOT NULL UNIQUE, name TEXT NOT NULL DEFAULT '', iban_tail TEXT NOT NULL DEFAULT '',
+    currency TEXT NOT NULL DEFAULT 'EUR', last_sync TEXT, last_error TEXT
 );
 """
 
@@ -162,6 +181,8 @@ def init_db(conn):
                          [(1, "Me", "#4f46e5"), (2, "Partner", "#e11d74")])
     for k, v in DEFAULT_SETTINGS.items():
         conn.execute("INSERT OR IGNORE INTO settings (key, value) VALUES (?,?)", (k, v))
+    conn.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('ingest_token', ?)",
+                 (secrets.token_urlsafe(18),))
     if conn.execute("SELECT COUNT(*) FROM categories").fetchone()[0] == 0:
         for name, kind, bucket, icon in CATEGORIES:
             conn.execute("INSERT INTO categories (name, kind, bucket, icon) VALUES (?,?,?,?)",
