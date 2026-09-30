@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Couple Finance</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💞</text></svg>">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">💞 <span>Couple Finance</span></div>
+    <nav id="nav" class="nav"></nav>
+    <div class="top-right">
+      <div class="monthsw" id="monthsw">
+        <button id="m-prev" aria-label="Previous month">‹</button>
+        <span id="m-label"></span>
+        <button id="m-next" aria-label="Next month">›</button>
+      </div>
+      <div class="whoami" id="whoami" title="Who is logging entries on this device?"></div>
+    </div>
+  </header>
+
+  <section class="quick">
+    <div class="quick-inner">
+      <input id="quick" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Quick add…  jumbo 23,50   ·   +2400 salary sam   ·   rent 950 shared 01-09">
+      <button id="quick-go" class="btn primary">Add</button>
+    </div>
+    <div id="quick-preview" class="quick-preview"></div>
+  </section>
+
+  <main id="view"></main>
+  <div id="toast-host"></div>
+  <div id="modal-host"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

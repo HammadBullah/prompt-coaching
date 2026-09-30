@@ -7,3 +7,6 @@ __pycache__/
 venv/
 .env
 *.safetensors
+
+# Couple Finance local data
+couple-finance/data/
